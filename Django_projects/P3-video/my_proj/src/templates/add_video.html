@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ block.super }}Browse Videos{% endblock %}
+
+{% block scripts %}
+    <script>
+        function youtube_parser(url){
+            var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+            var match = url.match(regExp);
+            return (match&&match[7].length==11)? match[7] : false;
+        }
+
+        $(document).ready(function() {
+            $('#preview').click(function(event){
+                event.preventDefault();
+                let url = $('#id_url').val();
+                let video_ID = youtube_parser(url)
+                url = 'https://www.youtube.com/embed/' + video_ID
+                let txt = '<iframe title="YouTube video player" class="youtube-player" type="text/html" width="640" height="390" src="'+url+'" frameborder="0" allowFullScreen></iframe>';
+                console.log(url);
+                $('#player_pos').html(txt);
+            });
+        } );
+    </script>
+{% endblock scripts %}
+
+{% block navbar-left %}
+  {% include "_navbar.html" with active_link="browse" %}
+{% endblock %}
+
+{% block container %}
+
+    <div id="sec1" class="text-page">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h1>{% include "_brandname.html" %}</h1>
+            <p class="lead">Awesome vids are here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container text-center">
+        <form method="post">
+            {% csrf_token %}
+            <p>
+                Enter the youtube video URL : <br>
+                {{ form.url }}  <br>
+            </p>
+            <p>
+                {{ form.restricted_to }}
+            </p>
+            <p>
+                <button id="preview">Check the video</button>
+                <button type="submit">Submit the video</button>
+            </p>
+        </form>
+
+        <div id="player_pos"></div>
+    </div>
+
+
+
+{% endblock container %}

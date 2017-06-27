@@ -1,0 +1,1 @@
+juste to chack that PyCuda is installed

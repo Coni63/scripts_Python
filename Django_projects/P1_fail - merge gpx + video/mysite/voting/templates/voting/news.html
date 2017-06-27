@@ -1,0 +1,27 @@
+{% extends "voting/header.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block menu %}
+{% include "voting/includes/menu.html" %}
+{% endblock %}
+
+{% block content %}
+    {% if not is_active %}
+        <p>Sorry you are still inactive</p>
+    {% else %}
+        <h1><a href="https://trello.com/b/exKrQXIg/django-site" target="_blank">Trello</a></h1>
+        {% for each in news %}
+            <article>
+                <h2>{{each.title}}</h2>
+                <h6>Made by  : {{each.proposed_by}}</h6>
+                <h6>le  : {{each.date}}</h6>
+                <h6>v{{each.version}}</h6>
+                <p>{{each.content|safe|linebreaks}}</p>
+            </article>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}

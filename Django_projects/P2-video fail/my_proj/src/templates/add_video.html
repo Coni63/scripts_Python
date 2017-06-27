@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ block.super }}Browse Videos{% endblock %}
+
+{% block navbar-left %}
+  {% include "_navbar.html" with active_link="browse" %}
+{% endblock %}
+
+{% block container %}
+
+    <div id="sec1" class="text-page">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h1>{% include "_brandname.html" %}</h1>
+            <p class="lead">Awesome vids are here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Soumettre le jeu</button>
+    </form>
+
+{% endblock container %}

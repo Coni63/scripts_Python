@@ -1,0 +1,27 @@
+{% extends "voting/header.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block menu %}
+{% include "voting/includes/menu.html" %}
+{% endblock %}
+
+{% block content %}
+    {% if not is_active %}
+        <p>Sorry you are still inactive</p>
+    {% else %}
+        <p>Welcome</p>
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+<script>
+$.notify({
+	title: "Welcome:",
+	message: "This plugin has been provided to you by Robert McIntosh aka mouse0270",
+	delay: 5000
+});
+</script>
+{% endblock %}
+
+<!---{% include "gpx_explorer/includes/htmlsnippet.html" %}--->

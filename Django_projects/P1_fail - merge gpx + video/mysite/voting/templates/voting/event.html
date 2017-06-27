@@ -1,0 +1,36 @@
+{% extends "voting/header.html" %}
+{% load app_filters %}
+{% block title %} Evenements {% endblock %}
+
+{% block menu %}
+{% include "voting/includes/menu.html" %}
+{% endblock %}
+
+{% block content %}
+    {% if not is_active %}
+        <p>Sorry you are still inactive</p>
+    {% else %}
+        <table class="table table-striped">
+        <tr><th>Event</th><th>Jeu</th><th>Prix</th><th>Lien</th><th>Proposé par</th><th>debut</th><th>fin</th><th>durée</th></tr>
+        {% for item in events %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.game }}</td>
+                <td>{{ item.price }}</td>
+                <td><a href={{ item.url }} target="_blank">Lien</a> </td>
+                <td>{{ item.proposed_by }}</td>
+                <td>{{ item.start }}({{ item.start|to_range }})</td>
+                <td>{{ item.stop }}({{ item.stop|to_range }})</td>
+                <td>{{ item.stop|set_duration:item.start }}</td>
+            </tr>
+
+        {% endfor %}
+        </table>
+        <div class="btn-group btn-group-lg" role="group" aria-label="...">
+            <a href="/addevent" class="btn btn-info" role="button">Proposer un event</a>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}

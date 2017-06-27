@@ -1,0 +1,77 @@
+
+{% extends "voting/header.html" %}
+{% load app_filters %}
+{% block title %} Game {% endblock %}
+
+{% block menu %}
+{% include "voting/includes/menu.html" %}
+{% endblock %}
+
+{% block content %}
+    {% if not is_active %}
+        <p>Sorry you are still inactive</p>
+    {% else %}
+        <table class="table table-striped">
+            <tr><th>Jeu</th><th>Style</th><th>Prix</th><th>Lien</th><th>Proposé par</th><th colspan="2"></th></tr>
+        {% for item in games %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.style }}</td>
+                <td>{{ item.price }}</td>
+                <td><a href={{ item.url_JVC }} target="_blank">Lien</a> </td>
+                <td>{{ item.proposed_by }}</td>
+                {% if votes|get_value:item.id == "up" %}
+                    <td><span data-game={{item.id}} class="glyphicon glyphicon-thumbs-up" style="color:blue"></span></td>  <!--style="color:blue"-->
+                    <td><span data-game={{item.id}} class="glyphicon glyphicon-thumbs-down"></span></td>
+                {% elif votes|get_value:item.id == "down" %}
+                    <td><span data-game={{item.id}} class="glyphicon glyphicon-thumbs-up" ></span></td>  <!--style="color:blue"-->
+                    <td><span data-game={{item.id}} class="glyphicon glyphicon-thumbs-down" style="color:red"></span></td>
+                {% else %}
+                    <td><span data-game={{item.id}} class="glyphicon glyphicon-thumbs-up" ></span></td>  <!--style="color:blue"-->
+                    <td><span data-game={{item.id}} class="glyphicon glyphicon-thumbs-down"></span></td>
+                {% endif %}
+                <td>{{item.score}}</td>
+            </tr>
+
+        {% endfor %}
+        </table>
+        <div class="btn-group btn-group-lg" role="group" aria-label="...">
+            <a href="/addgame" class="btn btn-info" role="button">Proposer un jeu</a>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(".glyphicon").click(function(){
+            $a = $(this).attr("data-game");
+            if ($(this).hasClass("glyphicon-thumbs-up")) {
+                $type = "up";
+            } else {
+                $type = "down";
+            }
+            $.ajax({
+                type: "GET",
+                url: '/ajax/vote/',
+                data: {
+                  '_target': $a,
+                  '_type': $type
+                },
+                dataType: 'json',
+                success: function (data) {
+                  if (data.status == 2) {
+                    location.reload();
+                  } else if (data.status == 1) {
+                    location.reload();
+                  } else if (data.status == 4){
+                    location.reload();
+                  } else {
+                    alert("error");
+                  }
+                }
+              });
+        });
+    </script>
+{% endblock %}
+
+<!---{% include "gpx_explorer/includes/htmlsnippet.html" %}--->

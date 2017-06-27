@@ -1,0 +1,31 @@
+{% extends "voting/header.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block menu %}
+    <!--<li><a href='/'>Home</a></li>-->
+    <!--<li><a href='/addgame'>Propose a game</a></li>-->
+    <li><a href='/login'>Login</a></li>
+    <li><a href='/signup'>Register</a></li>
+    <!--<li><a href='/logout'>Log out</a></li>-->
+{% endblock %}
+
+{% block content %}
+  <h2>Sign up</h2>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <p>
+      {{ field.label_tag }}<br>
+      {{ field }}
+      {% if field.help_text %}
+        <small style="color: grey">{{ field.help_text }}</small>
+      {% endif %}
+      {% for error in field.errors %}
+        <p style="color: red">{{ error }}</p>
+      {% endfor %}
+    </p>
+    {% endfor %}
+    <button type="submit">Sign up</button>
+  </form>
+{% endblock %}

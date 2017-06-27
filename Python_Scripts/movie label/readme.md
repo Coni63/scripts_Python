@@ -1,0 +1,1 @@
+The objective of this simple script was to be able by right-click to add (VU) / (PAS VU) before the name of videos in order to remember films never seens. Some changes are required in regedit to add the option in right-clic on some extensions

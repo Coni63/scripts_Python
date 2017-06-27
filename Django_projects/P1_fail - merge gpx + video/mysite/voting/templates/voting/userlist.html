@@ -1,0 +1,39 @@
+{% extends "voting/header.html" %}
+
+{% block title %} Utilisateurs {% endblock %}
+
+{% block menu %}
+{% include "voting/includes/menu.html" %}
+{% endblock %}
+
+{% block content %}
+    {% if not is_active %}
+        <p>Sorry you are still inactive</p>
+    {% else %}
+        <table class="table table-striped">
+            <tr><th>Username</th><th>Registered</th><th>Last connexion</th><th>Approved</th><th>admin</th></tr>
+        {% for item in users %}
+            <tr>
+                <td>{{ item.username }}</td>
+                <td>{{ item.date_joined }}</td>
+                <td>{{ item.last_login }}</td>
+                <td>
+                {% for group in item.groups.all %}
+                    {% if group.name == 'approved' %}
+                        <span data-game={{item.id}} class="glyphicon glyphicon-ok"></span>
+                    {% endif %}
+                {% endfor %}
+                </td>
+                <td>
+                {% if item.is_staff %}
+                    <span data-game={{item.id}} class="glyphicon glyphicon-ok"></span>
+                {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}

@@ -1,0 +1,2 @@
+The idea of this script was to slightly modify Caesar's algorithm. The change was based on the offset, we have the first offset and then the offset is equal to the index of the previous character. 
+An encryption and decryption has been started qbd should work in most cases

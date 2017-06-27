@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+
+
+    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <script>
+        $(document).ready(function() {
+            var url = '';
+            var title = '';
+
+            $('#video_table').DataTable( {
+                "order": [[ 6, "desc" ]]
+            });
+
+            $('.trigger_viewer').click(function(){
+                let video_ID = $(this).attr('rel');
+                url = 'https://www.youtube.com/embed/' + video_ID;
+                title = $(this).parent().next().text();
+            });
+
+            /* Assign empty url value to the iframe src attribute when
+            modal hide, which stop the video playing */
+            $("#myModal").on('hide.bs.modal', function(){
+                $("#playerVideo").attr('src', '');
+                $("#title_modal").text(title);
+            });
+
+            /* Assign the initially stored url back to the iframe src
+            attribute when modal is displayed again */
+            $("#myModal").on('show.bs.modal', function(){
+                $("#playerVideo").attr('src', url);
+                $("#title_modal").text(title);
+            });
+
+            $('.modal-admin').css('width', '765px');
+            $('.modal-admin').css('margin', '100px auto 100px auto');
+
+        } );
+    </script>
+{% endblock scripts %}
+
+{% load humanize %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ block.super }}Browse Videos{% endblock %}
+
+{% block navbar-left %}
+  {% include "_navbar.html" with active_link="browse" %}
+{% endblock %}
+
+{% block container %}
+
+    <div id="sec1" class="text-page">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h1>{% include "_brandname.html" %}</h1>
+            <p class="lead">Awesome vids are here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </br>
+
+    <div class="container-fluid">
+        <table id="video_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Name</th>
+                    <th>Views</th>
+                    <th>Upload</th>
+                    <th>Author</th>
+                    <th>Posted by</th>
+                    <th>Posted When</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>URL</th>
+                    <th>Name</th>
+                    <th>Views</th>
+                    <th>Upload</th>
+                    <th>Author</th>
+                    <th>Posted by</th>
+                    <th>Posted When</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for video in data %}
+                    <tr>
+                        <td>
+                            <!-- Button HTML (to Trigger Modal) -->
+                            <a href="#myModal" data-toggle="modal" class="btn btn-default trigger_viewer" rel="{{ video.key }}" style="width:100%; height:100%; background:none; border:none;box-shadow:none;">
+                                 <img src="{% static 'site/img/YouTube_icon.png' %}" width="40" /> &nbspWatch it !
+                            </a>
+                        </td>
+                        <td>{{ video.name }}</td>
+                        <td>{{ video.views_counter|intcomma }}</td>
+                        <td>{{ video.upload_date|date:'Y-m-d H:i' }}</td>
+                        <td>{{ video.author }}</td>
+                        <td>{{ video.added_by.name }}</td>
+                        <td>{{ video.added_date|date:'Y-m-d H:i' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/add_video/" class="btn btn-primary btn-lg active" role="button">Propose a video</a>
+    </div>
+
+    <!-- Modal HTML -->
+    <div id="myModal" class="modal fade">
+        <div class="modal-admin">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="title_modal"></h4>
+                </div>
+                <div class="modal-body">
+                    <iframe id="playerVideo" width="720" height="576" src="" frameborder="0" allowfullscreen></iframe> <!-- 560 x 315 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock container %}

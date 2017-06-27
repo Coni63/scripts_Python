@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block scripts %}
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+
+    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'site/css/error.css' %}" />
+{% endblock scripts %}
+
+{% block title %}{{ block.super }}Browse Videos{% endblock %}
+
+{% block navbar-left %}
+  {% include "_navbar.html" with active_link="browse" %}
+{% endblock %}
+
+{% block container %}
+    <div id="sec1" class="text-page">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h1>{% include "_brandname.html" %}</h1>
+            <p class="lead">Awesome vids are here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="error-template">
+                    <h1>
+                        Oops!</h1>
+                    <h2>
+                        {{ error.title }}</h2>
+                    <div class="error-details">
+                        {{ error.description }}
+                    </div>
+                    <div class="error-actions">
+                        <a href="/" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
+                            Take Me Home </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock container %}

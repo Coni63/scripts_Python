@@ -1,0 +1,4 @@
+<li {% if active_link == "browse_video" %}class="active"{% endif %}><a href="{% url 'browse_video' %}">Video</a></li>
+<li {% if active_link == "browse_game" %}class="active"{% endif %}><a href="{% url 'browse_game' %}">Game</a></li>
+<li {% if active_link == "browse_event" %}class="active"{% endif %}><a href="{% url 'browse_event' %}">Event</a></li>
+<li {% if active_link == "about" %}class="active"{% endif %}><a href="{% url 'about' %}">About</a></li>

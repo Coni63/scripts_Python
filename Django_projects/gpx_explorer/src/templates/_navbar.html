@@ -1,0 +1,6 @@
+<li {% if active_link == "home" %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li>
+{% if user.is_authenticated %}
+<li {% if active_link == "upload" %}class="active"{% endif %}><a href="{% url 'upload' %}">Upload</a></li>
+<li {% if active_link == "explore" %}class="active"{% endif %}><a href="{% url 'explore' %}">Explore</a></li>
+{% endif %}
+<li {% if active_link == "about" %}class="active"{% endif %}><a href="{% url 'about' %}">About</a></li>

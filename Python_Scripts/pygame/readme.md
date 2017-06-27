@@ -1,0 +1,1 @@
+Try on pygame to create a mineswweper. The orignal idea was also to create an AI which try to solve it

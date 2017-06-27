@@ -1,0 +1,9 @@
+django-admin startproject --template=F:\Nicolas\Documents\GitHub\edge --extension=py,md,html,env gpx_explorer
+
+cd my_proj/src
+
+copy my_proj/settings/local.sample.env my_proj/settings/local.env
+
+python manage.py migrate
+
+python manage.py createsuperuser --username=Nicolas --email=my_email@foo.bar

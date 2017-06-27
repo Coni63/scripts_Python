@@ -1,0 +1,19 @@
+{% extends "voting/header.html" %}
+
+{% block title %} Proposer un jeu {% endblock %}
+
+{% block menu %}
+{% include "voting/includes/menu.html" %}
+{% endblock %}
+
+{% block content %}
+  {% if not is_active %}
+        <p>Sorry you are still inactive</p>
+    {% else %}
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">Soumettre le jeu</button>
+        </form>
+    {% endif %}
+{% endblock %}
