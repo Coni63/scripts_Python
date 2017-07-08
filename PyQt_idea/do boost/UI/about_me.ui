@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>636</width>
+    <height>542</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>611</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Bienvenue sur DO_Boost_Simulator v.1</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>611</width>
+     <height>171</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ce petit programme permet de simuler un boost lors des event de raffinage 1:1 suivi d'un troc en diamant une fois la valeur
+de compte stabilisée. Pour ceci, il suffit de creer un nouveau compte (File =&gt; New). Ensuite il vous suffit de : 
+-Rentrer vos valeurs de compte
+-Rentrer vos settings pour la simulation que vous souhaitez.
+-Cliquer sur &quot;Calcul&quot; pour effectuer les simulations. 
+
+ A la fin vous pouvez afficher le resultat en graphe avec le boutton &quot;Graph&quot;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>250</y>
+     <width>611</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Updates à venir : 
+ -None</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
