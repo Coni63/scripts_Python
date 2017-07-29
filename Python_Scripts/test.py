@@ -195,3 +195,151 @@
 #     i = str(a).find('.')
 #     entier, decimal = int(str(a)[:i]), int(str(a)[i + 1:])
 # print(time.time() - start)
+
+#
+# def printOne(name, goal1):
+#     score1 = []
+#     for i in range(len(name)):
+#         print("\t\t\t\t" + name[i] + "\t " + str(point[i]) + " point - \t" + str(goal1[i]) + " buts")
+#
+#         score1.append(point[i])
+#
+#     print(score1)
+#
+#
+# name = ["Henry", "Owen", "Drogba"];
+# point = [2, 4, 6]
+# goal1 = [18, 12, 6]
+# goal2 = [6, 8, 5]
+#
+# #printOne(name, goal1)
+# score_per_player = dict(zip(name, point))
+# print(score_per_player)
+#
+# goal_per_player = list(zip(name, goal1))
+# goal_per_player.sort(key=lambda x:x[1])
+#
+# for index, player_info in enumerate(goal_per_player):
+#     score_per_player[player_info[0]] += point[index]
+#
+# print(score_per_player)
+#
+# def tris(name, goal1, goal2):
+#     for i in range(len(name) - 1, 0, -1):
+#         for j in range(i):
+#             if name[j + 1] < name[j]:
+#                 tempoName = name[j]
+#                 tempoGoal1 = goal1[j]
+#                 tempoGoal2 = goal2[j]
+#                 name[j] = name[j + 1]
+#                 goal1[j] = goal1[j + 1]
+#                 goal2[j] = goal2[j + 1]
+#                 name[j + 1] = tempoName
+#                 goal1[j + 1] = tempoGoal1
+#                 goal2[j + 1] = tempoGoal2
+#
+#
+# def trier(joueur, goal, goal2, point):
+#     swap = True
+#     while swap:
+#         swap = False
+#         for i in range(len(joueur)-1):
+#             if goal[i+1] > goal[i]:
+#                 joueur[i], joueur[i+1] = joueur[i+1], joueur[i]
+#                 goal[i], goal[i+1] = goal[i+1], goal[i]
+#                 goal2[i], goal2[i+1] = goal2[i+1], goal2[i]
+#                 point[i], point[i + 1] = point[i + 1], point[i]
+#                 swap = True
+#     return joueur, goal, goal2, point
+#
+#
+# def printOne(name, goal1, goal2):
+#     score1 = []
+#     score2 = []
+#     but1 = []
+#     but2 = []
+#     for i in range(len(name)):
+#         score1.append(point[i])
+#         but1.append(goal1[i])
+#         score2.append(point[i])
+#         but2.append(goal2[i])
+#
+#     print("\t \t \t \t Premier tour \n ")
+#
+#     for i in range(len(name)):
+#         print("\t\t\t\t" + name[i] + " \t " + str(score1[i]) + " points " + str(but1[i]) + " buts")
+#     print("=======================================================")
+#
+#     print("\t \t \t \t Second tour \n ")
+#
+#     for i in range(len(name)):
+#         print("\t\t\t\t" + name[i] + " \t " + str(score2[i]) + " points " + str(but2[i]) + " buts")
+#     print("=======================================================")
+#
+#     print("\t \t \t \t Classement Final \n ")
+#
+#     for i in range(len(name)):
+#         print(
+#             "\t\t\t\t" + name[i] + " \t " + str(score1[i] + score2[i]) + " points " + str(but1[i] + but2[i]) + " buts ")
+
+
+# name = ["Henry", "Owen", "Drogba"]
+# point = [0, 0, 0]
+# goal1 = [18, 12, 6]
+# goal2 = [6, 8, 5]
+# gain = [6,4,2]
+#
+# name, goal1, goal2, point = trier(name, goal1, goal2, point)
+# for i in range(len(name)):
+#     point[i] += gain[i]
+#
+#
+#
+# name, goal2, goal1, point = trier(name, goal2, goal1, point)
+# for i in range(len(name)):
+#     point[i] += gain[i]
+#
+# print(name)
+# print(point)
+# print(goal1, goal2)
+
+# def printOne(name, goal, title, current_pts):
+#     print("\t\t\t\t{}\n".format(title))
+#     for i in range(len(name)):
+#         print("\t\t\t\t {} \t {} points {} buts".format(name[i], gain[i] ,goal[i]))
+#     print("=======================================================")
+#     return current_pts
+#
+# def trier(name, goal1, goal2, pts):
+#     swap = True
+#     while swap:
+#         swap = False
+#         for i in range(len(name) - 1):
+#             if goal1[i + 1] < goal1[i]:
+#                 name[i], name[i + 1] = name[i + 1], name[i]
+#                 goal1[i], goal1[i + 1] = goal1[i + 1], goal1[i]
+#                 goal2[i], goal2[i + 1] = goal2[i + 1], goal2[i]
+#                 pts[i], pts[i + 1] = pts[i + 1], pts[i]
+#                 swap = True
+#     return name, goal1, goal2, pts
+#
+#
+# name = ["Henry", "Owen", "Drogba"]
+# point = [0,0,0]
+# goal1 = [18, 12, 6]
+# goal2 = [6, 8, 5]
+# gain = [2,4,6]
+#
+# name, goal1, goal2, point = trier(name, goal1, goal2, point)
+# point = printOne(name, goal1, "Premier tour", point)
+#
+# name, goal2, goal1, point = trier(name, goal2, goal1, point)
+# point = printOne(name, goal2, "2nd tour", point)
+
+#point = printTotal(name, goal1, "Total", point)
+
+import datetime
+
+now = datetime.datetime.now()
+s = now.hour * 3600 + now.minute * 60 + now.second
+print(s)
