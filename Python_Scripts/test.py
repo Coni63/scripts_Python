@@ -338,8 +338,16 @@
 
 #point = printTotal(name, goal1, "Total", point)
 
-import datetime
+# import datetime
+#
+# now = datetime.datetime.now()
+# s = now.hour * 3600 + now.minute * 60 + now.second
+# print(s)
 
-now = datetime.datetime.now()
-s = now.hour * 3600 + now.minute * 60 + now.second
-print(s)
+a = [0] * 5
+b = a
+c = a[:]
+
+a[2] = 1
+print(a ,"\n", b, "\n", c)
+print(id(a), id(b), id(c))
