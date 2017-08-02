@@ -344,10 +344,24 @@
 # s = now.hour * 3600 + now.minute * 60 + now.second
 # print(s)
 
-a = [0] * 5
-b = a
-c = a[:]
+# a = [0] * 5
+# b = a
+# c = a[:]
+#
+# a[2] = 1
+# print(a ,"\n", b, "\n", c)
+# print(id(a), id(b), id(c))
 
-a[2] = 1
-print(a ,"\n", b, "\n", c)
-print(id(a), id(b), id(c))
+from tkinter import *
+
+COLOR = "green"
+
+root = Tk()
+
+root.config(highlightbackground=COLOR)
+button = Button(text="button", borderwidth ="0")
+button.pack(padx=5, pady=5)
+button2 = Button(text="button", borderwidth ="2")
+button2.pack(padx=5, pady=5)
+
+root.mainloop()

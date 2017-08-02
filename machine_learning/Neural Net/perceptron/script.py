@@ -14,6 +14,7 @@ class Point:
 class Perceptron:
     def __init__(self, size):
         self.learning_rate = 0.01
+        self.learning_lose = 0.99
         self.size = size
         self.weight = [ random.random() for _ in range(self.size) ]
 
@@ -27,6 +28,8 @@ class Perceptron:
             error = answer - guess
             for i in range(self.size):
                 self.weight[i] += error * self.learning_rate * sample.coord[i]
+            if error:
+                self.learning_rate *= self.learning_lose
             print(" ")
     def guess(self, point):
         S = sum([self.weight[i] * point[i] for i in range(self.size)])
@@ -92,6 +95,7 @@ print("before training : ", brain)
 brain.train(train_sample)
 print("after training : ", brain)
 print("reussite : {:2f} %".format(brain.eval(test_sample)))
+print(brain.learning_rate)
 plt = brain.plot_sample(plt, test_sample)
 plt.legend(loc=2)
 plt.show()
