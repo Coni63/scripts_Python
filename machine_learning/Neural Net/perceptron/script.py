@@ -1,103 +1,65 @@
-import random
+import numpy as np
 import matplotlib.pyplot as plt
-
-class Point:
-    def __init__(self, C, G, Y):
-        self.coord = C
-        self.guess = G
-        self.y_real = Y
-
-    def __repr__(self):
-        return "{} => {}".format(self.coord, self.guess)
-
 
 class Perceptron:
     def __init__(self, size):
-        self.learning_rate = 0.01
-        self.learning_lose = 0.99
+        self.learning_rate = 0.025
         self.size = size
-        self.weight = [ random.random() for _ in range(self.size) ]
+        self.weight = np.random.rand(3)
 
     def __repr__(self):
-        return "{}".format([x / min(self.weight) for x in self.weight])
+        return "{}".format(self.weight)
 
-    def train(self, samples):
-        for sample in samples:
-            guess = self.guess(sample.coord)
-            answer = sample.guess
-            error = answer - guess
-            for i in range(self.size):
-                self.weight[i] += error * self.learning_rate * sample.coord[i]
-            if error:
-                self.learning_rate *= self.learning_lose
-            print(" ")
-    def guess(self, point):
-        S = sum([self.weight[i] * point[i] for i in range(self.size)])
-        if S >= 0:
-            output = 1
-        else:
-            output = -1
-        return output
+    def fit(self, samples, target):
+        for i in range(len(samples)):
+            guess = np.sign(np.sum(self.weight * samples[i]))
+            error = target[i] - guess
+            self.weight += error * self.learning_rate * samples[i]
 
-    def calc(self, x):
-        return (-self.weight[0]*x - self.weight[2])/self.weight[1]
+    def guess(self, list_point, target):
+        accuracy = 0
+        for i in range(len(list_point)):
+            guess = np.sign(np.sum(self.weight * list_point[i]))
+            if guess == target[i]:
+                accuracy += 1
+        return accuracy/len(list_point)
 
-    def eval(self, samples):
-        mistakes = 0
-        for sample in samples:
-            guess = self.guess(sample.coord)
-            answer = sample.guess
-            if guess != answer:
-                mistakes += 1
-        return 100*(1-(mistakes/len(samples)))
+    def evaluate(self, X):
+        return -(self.weight[1]*X + self.weight[0])/self.weight[2]
 
-    def plot_sample(self, plot, samples):
-        g, b = 0, 0
-        for sample in samples:
-            guess = self.guess(sample.coord)
-            answer = sample.guess
-            if guess != answer:
-                plot.scatter(*sample.coord, color="red", label="wrong guess" if b == 0 else "")
-                b += 1
-            else:
-                plot.scatter(*sample.coord, color="blue", label = "good guess" if g == 0 else "")
-                g += 1
-
-        plt.plot([0, 1], [self.calc(0), self.calc(1)], color="orange", label="Perceptron")
-
-        return plot
-
-def create_sample(n):
-    sample = []
-    for i in range(n):
-        x = random.random()
-        y = random.random()
-        yt = f(x)
-        if yt >= y:
-            r = 1
-        else:
-            r = -1
-        sample.append(Point([x, y, 1], r, yt))
-    return sample
 
 def f(x):
-    return 2*x - 0.1
+    return 2*x-0.1
 
 brain = Perceptron(3)
-train_sample = create_sample(5000)
-test_sample = create_sample(100)
 
+#training set
+n = 5000
+bias = np.ones(n)
+X = np.random.rand(n)
+Y = np.random.rand(n)
+C = np.sign(Y-f(X))
+
+brain.fit(np.c_[bias, X, Y], C)
+
+# test set
+n = 500
+bias = np.ones(n)
+X = np.random.rand(n)
+Y = np.random.rand(n)
+C = np.sign(Y-f(X))
+
+acc = brain.guess(np.c_[bias, X, Y], C)
+
+print("accuracy {:.2f} %".format(acc*100))
+
+plt.plot([0, 1], [brain.evaluate(0), brain.evaluate(1)], color="red", label="Guess")
 plt.plot([0, 1], [f(0), f(1)], color="green", label="Theory")
+plt.scatter(X, Y, c=C )
 plt.xlim(0, 1)
 plt.ylim(0, 1)
-
-print("before training : ", brain)
-brain.train(train_sample)
-print("after training : ", brain)
-print("reussite : {:2f} %".format(brain.eval(test_sample)))
-print(brain.learning_rate)
-plt = brain.plot_sample(plt, test_sample)
-plt.legend(loc=2)
+plt.legend(loc="upper right")
+plt.text(0.05, 0.92, "accuracy {:.2f} %".format(acc*100), bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 10})
 plt.show()
 
 
