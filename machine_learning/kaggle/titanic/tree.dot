@@ -1,0 +1,32 @@
+digraph Tree {
+node [shape=box] ;
+0 [label="Sex <= 0.5\ngini = 0.4724\nsamples = 889\nvalue = [549, 340]\nclass = Survived"] ;
+1 [label="Pclass <= 0.75\ngini = 0.3844\nsamples = 312\nvalue = [81, 231]\nclass = Died"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="Age <= 0.0261\ngini = 0.1014\nsamples = 168\nvalue = [9, 159]\nclass = Died"] ;
+1 -> 2 ;
+3 [label="gini = 0.5\nsamples = 2\nvalue = [1, 1]\nclass = Survived"] ;
+2 -> 3 ;
+4 [label="gini = 0.0917\nsamples = 166\nvalue = [8, 158]\nclass = Died"] ;
+2 -> 4 ;
+5 [label="Fare <= 0.0456\ngini = 0.5\nsamples = 144\nvalue = [72, 72]\nclass = Survived"] ;
+1 -> 5 ;
+6 [label="gini = 0.4839\nsamples = 117\nvalue = [48, 69]\nclass = Died"] ;
+5 -> 6 ;
+7 [label="gini = 0.1975\nsamples = 27\nvalue = [24, 3]\nclass = Survived"] ;
+5 -> 7 ;
+8 [label="Cabin <= 0.5\ngini = 0.3064\nsamples = 577\nvalue = [468, 109]\nclass = Survived"] ;
+0 -> 8 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+9 [label="Age <= 0.0387\ngini = 0.2353\nsamples = 470\nvalue = [406, 64]\nclass = Survived"] ;
+8 -> 9 ;
+10 [label="gini = 0.4592\nsamples = 14\nvalue = [5, 9]\nclass = Died"] ;
+9 -> 10 ;
+11 [label="gini = 0.2121\nsamples = 456\nvalue = [401, 55]\nclass = Survived"] ;
+9 -> 11 ;
+12 [label="Age <= 0.2146\ngini = 0.4874\nsamples = 107\nvalue = [62, 45]\nclass = Survived"] ;
+8 -> 12 ;
+13 [label="gini = 0.0\nsamples = 8\nvalue = [0, 8]\nclass = Died"] ;
+12 -> 13 ;
+14 [label="gini = 0.4681\nsamples = 99\nvalue = [62, 37]\nclass = Survived"] ;
+12 -> 14 ;
+}
