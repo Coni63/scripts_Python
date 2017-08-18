@@ -207,136 +207,6 @@
 #     print(score1)
 #
 #
-# name = ["Henry", "Owen", "Drogba"];
-# point = [2, 4, 6]
-# goal1 = [18, 12, 6]
-# goal2 = [6, 8, 5]
-#
-# #printOne(name, goal1)
-# score_per_player = dict(zip(name, point))
-# print(score_per_player)
-#
-# goal_per_player = list(zip(name, goal1))
-# goal_per_player.sort(key=lambda x:x[1])
-#
-# for index, player_info in enumerate(goal_per_player):
-#     score_per_player[player_info[0]] += point[index]
-#
-# print(score_per_player)
-#
-# def tris(name, goal1, goal2):
-#     for i in range(len(name) - 1, 0, -1):
-#         for j in range(i):
-#             if name[j + 1] < name[j]:
-#                 tempoName = name[j]
-#                 tempoGoal1 = goal1[j]
-#                 tempoGoal2 = goal2[j]
-#                 name[j] = name[j + 1]
-#                 goal1[j] = goal1[j + 1]
-#                 goal2[j] = goal2[j + 1]
-#                 name[j + 1] = tempoName
-#                 goal1[j + 1] = tempoGoal1
-#                 goal2[j + 1] = tempoGoal2
-#
-#
-# def trier(joueur, goal, goal2, point):
-#     swap = True
-#     while swap:
-#         swap = False
-#         for i in range(len(joueur)-1):
-#             if goal[i+1] > goal[i]:
-#                 joueur[i], joueur[i+1] = joueur[i+1], joueur[i]
-#                 goal[i], goal[i+1] = goal[i+1], goal[i]
-#                 goal2[i], goal2[i+1] = goal2[i+1], goal2[i]
-#                 point[i], point[i + 1] = point[i + 1], point[i]
-#                 swap = True
-#     return joueur, goal, goal2, point
-#
-#
-# def printOne(name, goal1, goal2):
-#     score1 = []
-#     score2 = []
-#     but1 = []
-#     but2 = []
-#     for i in range(len(name)):
-#         score1.append(point[i])
-#         but1.append(goal1[i])
-#         score2.append(point[i])
-#         but2.append(goal2[i])
-#
-#     print("\t \t \t \t Premier tour \n ")
-#
-#     for i in range(len(name)):
-#         print("\t\t\t\t" + name[i] + " \t " + str(score1[i]) + " points " + str(but1[i]) + " buts")
-#     print("=======================================================")
-#
-#     print("\t \t \t \t Second tour \n ")
-#
-#     for i in range(len(name)):
-#         print("\t\t\t\t" + name[i] + " \t " + str(score2[i]) + " points " + str(but2[i]) + " buts")
-#     print("=======================================================")
-#
-#     print("\t \t \t \t Classement Final \n ")
-#
-#     for i in range(len(name)):
-#         print(
-#             "\t\t\t\t" + name[i] + " \t " + str(score1[i] + score2[i]) + " points " + str(but1[i] + but2[i]) + " buts ")
-
-
-# name = ["Henry", "Owen", "Drogba"]
-# point = [0, 0, 0]
-# goal1 = [18, 12, 6]
-# goal2 = [6, 8, 5]
-# gain = [6,4,2]
-#
-# name, goal1, goal2, point = trier(name, goal1, goal2, point)
-# for i in range(len(name)):
-#     point[i] += gain[i]
-#
-#
-#
-# name, goal2, goal1, point = trier(name, goal2, goal1, point)
-# for i in range(len(name)):
-#     point[i] += gain[i]
-#
-# print(name)
-# print(point)
-# print(goal1, goal2)
-
-# def printOne(name, goal, title, current_pts):
-#     print("\t\t\t\t{}\n".format(title))
-#     for i in range(len(name)):
-#         print("\t\t\t\t {} \t {} points {} buts".format(name[i], gain[i] ,goal[i]))
-#     print("=======================================================")
-#     return current_pts
-#
-# def trier(name, goal1, goal2, pts):
-#     swap = True
-#     while swap:
-#         swap = False
-#         for i in range(len(name) - 1):
-#             if goal1[i + 1] < goal1[i]:
-#                 name[i], name[i + 1] = name[i + 1], name[i]
-#                 goal1[i], goal1[i + 1] = goal1[i + 1], goal1[i]
-#                 goal2[i], goal2[i + 1] = goal2[i + 1], goal2[i]
-#                 pts[i], pts[i + 1] = pts[i + 1], pts[i]
-#                 swap = True
-#     return name, goal1, goal2, pts
-#
-#
-# name = ["Henry", "Owen", "Drogba"]
-# point = [0,0,0]
-# goal1 = [18, 12, 6]
-# goal2 = [6, 8, 5]
-# gain = [2,4,6]
-#
-# name, goal1, goal2, point = trier(name, goal1, goal2, point)
-# point = printOne(name, goal1, "Premier tour", point)
-#
-# name, goal2, goal1, point = trier(name, goal2, goal1, point)
-# point = printOne(name, goal2, "2nd tour", point)
-
-#point = printTotal(name, goal1, "Total", point)
 
 # import datetime
 #
@@ -352,16 +222,127 @@
 # print(a ,"\n", b, "\n", c)
 # print(id(a), id(b), id(c))
 
-from tkinter import *
+# from tkinter import *
+#
+# COLOR = "green"
+#
+# root = Tk()
+#
+# root.config(highlightbackground=COLOR)
+# button = Button(text="button", borderwidth ="0")
+# button.pack(padx=5, pady=5)
+# button2 = Button(text="button", borderwidth ="2")
+# button2.pack(padx=5, pady=5)
+#
+# root.mainloop()
 
-COLOR = "green"
+# import matplotlib.pyplot as plt
+# from pylab import *
+#
+# fig = plt.figure()
+# matplotlib.rcParams['figure.figsize'] = [400, 50]
+# fig.patch.set_facecolor('#2c3e50')
+# #fig.patch.set_alpha(0.7)
+#
+# ax = fig.add_subplot(111)
+#
+# size = 75
+# a, b, c = 1, 1.2, 0.75
+# t = arange(0.0, 100, 100/size)
+# s = a * (-1 + np.random.random(size))
+# s2 = b * (-1 + np.random.random(size))
+# s3 = c * (-1 + np.random.random(size))
+#
+# plot(t, s)
+# plot(t, s2)
+# plot(t, s3)
+#
+# ax.patch.set_facecolor('#2c3e50')
+# #ax.patch.set_alpha(0.5)
+#
+# ax.axes.get_xaxis().set_visible(False)
+# ax.axes.get_yaxis().set_visible(False)
+# ax.axis('off')
+# plt.tight_layout()
+#
+# # If we don't specify the edgecolor and facecolor for the figure when
+# # saving with savefig, it will override the value we set earlier!
+# fig.savefig('header-bg.png', facecolor=fig.get_facecolor(), edgecolor='none', bbox_inches='tight', pad_inches=0, dpi=199)
+# plt.show()
 
-root = Tk()
+# import uuid
+#
+# class Abc:
+#     def __init__(self, id2 = uuid.uuid4()):
+#         self.ID = id2
+#
+#     def __repr__(self):
+#         return "{}".format(self.ID)
+#
+# for _ in range(10):
+#     a = Abc()
+#     print(a)
 
-root.config(highlightbackground=COLOR)
-button = Button(text="button", borderwidth ="0")
-button.pack(padx=5, pady=5)
-button2 = Button(text="button", borderwidth ="2")
-button2.pack(padx=5, pady=5)
+# print(list('abc'))
+#
+# print(list(map(str, 'abc')))
+#
+# L = [
+#     {"value": 1, "other_value": 4},
+#     {"value": 2, "other_value": 3},
+#     {"value": None, "other_value": 2},
+#     {"value": 4, "other_value": 1},
+#     {"value": None, "other_value": 42},
+#     {"value": 3, "other_value": 9001}
+# ]
+#
+# def weighted(nb):
+#     if nb is None:
+#         return -float('inf')
+#     else:
+#         return nb
+#
+# L.sort(key=lambda x:weighted(x["value"]), reverse=True)
+# print(L)
 
-root.mainloop()
+
+import timeit
+
+
+def f1():
+    a = {}
+    for i in range(1000):
+        a[i] = i
+    return a
+
+def f2():
+    a = {}
+    for i in range(1000):
+        a[str(i)] = i
+    return a
+
+def f3():
+    a = {}
+    for i in range(1000):
+        a[(i, i)] = i
+    return a
+
+def f4():
+    a = {}
+    for i in range(1000):
+        a[(str(i), str(i))] = i
+    return a
+
+def f5():
+    for i in range(1000):
+        str(i)
+
+print(timeit.timeit("f1()", number = 1000, setup="from __main__ import f1"))
+t1 = timeit.timeit("f2()", number = 1000, setup="from __main__ import f2")
+print(timeit.timeit("f3()", number = 1000, setup="from __main__ import f3"))
+t2 = timeit.timeit("f4()", number = 1000, setup="from __main__ import f4")
+tstr = timeit.timeit("f5()", number = 1000, setup="from __main__ import f5")
+print(t1-tstr)
+print(t2-2*tstr)
+
+

@@ -186,15 +186,16 @@ def main():
     channel = 139  # picking some feature channel to visualize
 
     # open image
-    img = PIL.Image.open('980x.jpg')
-    img = np.float32(img)
-    # img = np.random.randint(255, size=(500,500,3))
-    # scipy.misc.imsave('original.jpg', img)
+    # img = PIL.Image.open('header-bg.jpg')
+    # img = np.float32(img)
+    img = np.random.randint(255, size=(50,50,3))
+    scipy.misc.imsave('original.jpg', img)
 
-    for i in range(10):
+    for i in range(150):
         # Step 4 - Apply gradient ascent to that layer
         img = render_deepdream(tf.square(T('mixed4c')), img)
-        scipy.misc.imsave('outfile{}.jpg'.format(i), img)
+        if i % 10 == 0:
+            scipy.misc.imsave('outfile{}.jpg'.format(i), img)
 
 if __name__ == '__main__':
     main()
