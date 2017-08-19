@@ -112,7 +112,7 @@ import numpy as np
     #
     # #crossover
 
-number_of_items = 5
+number_of_items = 50
 w = np.random.rand(number_of_items) * 5000
 v = np.random.rand(number_of_items) * 30
 p = np.random.rand(number_of_items) * 500
@@ -121,12 +121,13 @@ backpack_volume = sum(v)//2
 backpack_weight = sum(w)//2
 
 # generation de la population
-population = 100
+population = 1000
 pop = np.random.randint(0, 2 , size=(population, number_of_items))
 
 nb_generation = 100
 for generation in range(nb_generation):
     # evaluation
+    population = pop.shape[0]
     total_mass = np.matmul(pop, w)
     total_volume = np.matmul(pop, v)
     total_value = np.matmul(pop, p)
@@ -136,8 +137,6 @@ for generation in range(nb_generation):
             total_value[i] /= 2
         if total_volume[i] > backpack_volume:
             total_value[i] /= 2
-
-    print(total_value)
 
     maxi = max(total_value)
     fitness = total_value/maxi
@@ -163,6 +162,30 @@ for generation in range(nb_generation):
     improved_fitness = improved_fitness[to_delete == False]
 
     # crossover
+    crossover_ratio = 0.5
+    for indiv in pop:
+        if random.random() < crossover_ratio:
+            idx = np.random.randint(population//2)
+            position = np.random.randint(1, number_of_items)
+            other_indiv = list(pop[idx])
+            first_indiv = list(indiv)
+            indiv = first_indiv[:position] + other_indiv[position:]
+            other_indiv = other_indiv[:position] + first_indiv[position:]
+            pop = np.concatenate((pop, [indiv, other_indiv]))
 
+    # mutation
+    mutation_ratio = 0.05
+    for indiv in pop:
+        if random.random() < mutation_ratio:
+            idx = np.random.randint(number_of_items)
+            if indiv[idx] == 1 :
+                indiv[idx] = 0
+            else:
+                indiv[idx] = 1
+    if generation%100:
+        print(max(total_value))
 
-
+print("Population_finale = ", pop.shape[0])
+print("masse : {} / {}".format(total_mass[0], backpack_weight))
+print("volume : {} / {}".format(total_volume[0], backpack_volume))
+print("prix : {}".format(total_value[0]))
