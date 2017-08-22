@@ -3,6 +3,9 @@ from tensorflow.examples.tutorials.mnist import input_data
 import numpy as np
 from sklearn.decomposition import PCA
 
+def leaky_relu(z, alpha=0.01):
+    return tf.maximum(alpha*z, z)
+
 def next_batch(X, y, size=50, nb = 50):
     nb_instance, nb_features = X.shape
     p = np.random.permutation(nb_instance)
@@ -13,8 +16,8 @@ def next_batch(X, y, size=50, nb = 50):
         yield X[a], y[a]
 
 input_features = 28*28
-size_hidden_layer_1 = 2*28*28
-size_hidden_layer_2 = 500
+size_hidden_layer_1 = 300
+size_hidden_layer_2 = 100
 size_output_layer = 10
 
 # Creation Graph
@@ -22,9 +25,13 @@ X = tf.placeholder(tf.float32, shape=(None, input_features), name='X')
 y = tf.placeholder(tf.int32, shape=(None), name='y')
 
 # Creation layers
-hidden_layer_1 = tf.layers.dense(X, size_hidden_layer_1, name="hidden1", activation=tf.nn.relu)
-hidden_layer_2 = tf.layers.dense(hidden_layer_1, size_hidden_layer_2, name="hidden2", activation=tf.nn.relu)
-output_layer = tf.layers.dense(hidden_layer_2, size_output_layer, name="output") # pas d'activation
+hidden_layer_1 = tf.layers.dense(X, size_hidden_layer_1, name="hidden1", activation=leaky_relu)
+bn1 = tf.layers.batch_normalization(hidden_layer_1, training=True, momentum=0.9)
+bn1_act = tf.nn.elu(bn1)
+hidden_layer_2 = tf.layers.dense(bn1_act, size_hidden_layer_2, name="hidden2", activation=leaky_relu)
+bn2 = tf.layers.batch_normalization(hidden_layer_2, training=True, momentum=0.9)
+bn2_act = tf.nn.elu(bn2)
+output_layer = tf.layers.dense(bn2_act, size_output_layer, name="output") # pas d'activation
 
 # Cost function
 cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=output_layer)
@@ -44,7 +51,7 @@ saver = tf.train.Saver()
 
 # Tensorborad info
 acc_summary = tf.summary.scalar("Accuracy", accuracy)
-file_writter = tf.summary.FileWriter("/saves/summary/Original-{}-{}/".format(size_hidden_layer_1, size_hidden_layer_2), tf.get_default_graph())
+file_writter = tf.summary.FileWriter("/saves/summary/BN_elu-{}-{}/".format(size_hidden_layer_1, size_hidden_layer_2), tf.get_default_graph())
 
 training_step = True
 mnist = input_data.read_data_sets("/data/")
