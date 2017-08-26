@@ -25,10 +25,10 @@ X = tf.placeholder(tf.float32, shape=(None, input_features), name='X')
 y = tf.placeholder(tf.int32, shape=(None), name='y')
 
 # Creation layers
-hidden_layer_1 = tf.layers.dense(X, size_hidden_layer_1, name="hidden1", activation=leaky_relu)
+hidden_layer_1 = tf.layers.dense(X, size_hidden_layer_1, name="hidden1", activation=tf.nn.elu)
 bn1 = tf.layers.batch_normalization(hidden_layer_1, training=True, momentum=0.9)
 bn1_act = tf.nn.elu(bn1)
-hidden_layer_2 = tf.layers.dense(bn1_act, size_hidden_layer_2, name="hidden2", activation=leaky_relu)
+hidden_layer_2 = tf.layers.dense(bn1_act, size_hidden_layer_2, name="hidden2", activation=tf.nn.elu)
 bn2 = tf.layers.batch_normalization(hidden_layer_2, training=True, momentum=0.9)
 bn2_act = tf.nn.elu(bn2)
 output_layer = tf.layers.dense(bn2_act, size_output_layer, name="output") # pas d'activation
@@ -39,7 +39,7 @@ loss= tf.reduce_mean(cross_entropy)
 
 # Backpropagation
 LR = 0.01
-optimizer = tf.train.GradientDescentOptimizer(LR).minimize(loss)
+optimizer = tf.train.MomentumOptimizer(learning_rate=LR, momentum=0.9).minimize(loss)
 
 # evaluation
 correct = tf.nn.in_top_k(output_layer, y, 1)
@@ -51,7 +51,7 @@ saver = tf.train.Saver()
 
 # Tensorborad info
 acc_summary = tf.summary.scalar("Accuracy", accuracy)
-file_writter = tf.summary.FileWriter("/saves/summary/BN_elu-{}-{}/".format(size_hidden_layer_1, size_hidden_layer_2), tf.get_default_graph())
+file_writter = tf.summary.FileWriter("/saves/summary/BN_MO_elu-{}-{}/".format(size_hidden_layer_1, size_hidden_layer_2), tf.get_default_graph())
 
 training_step = True
 mnist = input_data.read_data_sets("/data/")

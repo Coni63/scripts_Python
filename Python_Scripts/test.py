@@ -304,45 +304,101 @@
 #
 # L.sort(key=lambda x:weighted(x["value"]), reverse=True)
 # print(L)
+#
+#
+# import timeit
+#
+#
+# def f1():
+#     a = {}
+#     for i in range(1000):
+#         a[i] = i
+#     return a
+#
+# def f2():
+#     a = {}
+#     for i in range(1000):
+#         a[str(i)] = i
+#     return a
+#
+# def f3():
+#     a = {}
+#     for i in range(1000):
+#         a[(i, i)] = i
+#     return a
+#
+# def f4():
+#     a = {}
+#     for i in range(1000):
+#         a[(str(i), str(i))] = i
+#     return a
+#
+# def f5():
+#     for i in range(1000):
+#         str(i)
+#
+# print(timeit.timeit("f1()", number = 1000, setup="from __main__ import f1"))
+# t1 = timeit.timeit("f2()", number = 1000, setup="from __main__ import f2")
+# print(timeit.timeit("f3()", number = 1000, setup="from __main__ import f3"))
+# t2 = timeit.timeit("f4()", number = 1000, setup="from __main__ import f4")
+# tstr = timeit.timeit("f5()", number = 1000, setup="from __main__ import f5")
+# print(t1-tstr)
+# print(t2-2*tstr)
+#
 
+# class Eleve:
+#     def __init__(self, nom, notes = []):
+#         self.nom = nom
+#         self.notes = notes
+#         self.pts = 0
+#         self.score = 0
+#         self.set_fitness()
+#
+#     def __repr__(self):
+#         return "{}(diff : {}) a {} pts \n".format(self.nom, self.score ,self.pts)
+#
+#     def set_fitness(self):
+#         self.score = self.notes[1] - self.notes[0]
+#
+#
+# nom = ["Fred", "Alain", "Marc", "Emile"]
+# note1 = [12, 10, 8, 9]
+# note2 = [16, 10, 4, 23]
+# note_global = list(zip(note1, note2))
+# print(note_global) # pack des note par eleve
+#
+# # creation des instance d'eleves
+# liste_eleve = []
+# for i in range(4):
+#     liste_eleve.append(Eleve(nom[i], note_global[i]))
+#
+# # tous les eleve sont stocke dans ce tableau
+# print(liste_eleve)
+#
+# # on les trie par notes
+# liste_eleve.sort(key=lambda x:x.score, reverse=True)
+# print(liste_eleve)
+#
+# # on attribut les pts
+# score = [6,4,2,0]
+# for i, each in enumerate(liste_eleve):
+#     each.pts = score[i]
+# print(liste_eleve)
 
-import timeit
+# import distutils
+# print(distutils.spawn.find_executable('ffmpeg'))
 
+# from math import pi
+# liste = [0.1, 1, 10, 100, 88.8]
+# for diam in liste:
+#     #diam = float(diam)
+#     r = diam/2
+#     section = 2 * pi * r**2
+#     aire = 4 * pi * r**2
+#     vol = 4/3 * pi * r**3
+#     phrase = "Diamètre: {:8.2f} cm - Section: {:8.2f} cm² - Aire: {:8.2f} cm² - Volume: {:8.2f} cm³\n"
+#     print(phrase.format(diam, section, aire, vol))
 
-def f1():
-    a = {}
-    for i in range(1000):
-        a[i] = i
-    return a
-
-def f2():
-    a = {}
-    for i in range(1000):
-        a[str(i)] = i
-    return a
-
-def f3():
-    a = {}
-    for i in range(1000):
-        a[(i, i)] = i
-    return a
-
-def f4():
-    a = {}
-    for i in range(1000):
-        a[(str(i), str(i))] = i
-    return a
-
-def f5():
-    for i in range(1000):
-        str(i)
-
-print(timeit.timeit("f1()", number = 1000, setup="from __main__ import f1"))
-t1 = timeit.timeit("f2()", number = 1000, setup="from __main__ import f2")
-print(timeit.timeit("f3()", number = 1000, setup="from __main__ import f3"))
-t2 = timeit.timeit("f4()", number = 1000, setup="from __main__ import f4")
-tstr = timeit.timeit("f5()", number = 1000, setup="from __main__ import f5")
-print(t1-tstr)
-print(t2-2*tstr)
-
-
+import math
+max_angle = math.radians(20)
+print(max_angle)
