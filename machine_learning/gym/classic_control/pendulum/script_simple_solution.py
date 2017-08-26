@@ -15,8 +15,9 @@ score = 0
 observation = env.reset()
 while True:
     env.render()
-    action = simple_solver(observation)
-    observation, reward, done, info = env.step(action) # observation = [cart_position, cart speed, pole angle, pole speed]
+    action = [0.01] #simple_solver(observation)
+    observation, reward, done, info = env.step(action) # observation = [cos(theta), sin(theta), theta dot]
+    print(observation)
     score += reward
     if done:
         break

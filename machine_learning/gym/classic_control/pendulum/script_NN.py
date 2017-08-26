@@ -20,7 +20,7 @@ X = tf.placeholder(tf.float32, shape=[None, n_inputs])
 hidden = tf.layers.dense(X, n_hidden, activation=tf.nn.elu, kernel_initializer=initializer)
 hidden2 = tf.layers.dense(hidden, n_hidden, activation=tf.nn.elu, kernel_initializer=initializer)
 logits = tf.layers.dense(hidden2, n_outputs)
-outputs = tf.nn.sigmoid(logits)  # probability of action 0 (left)
+outputs = tf.multiply(2, tf.nn.sigmoid(logits))
 p_left_and_right = tf.concat(axis=1, values=[outputs, 1 - outputs])
 action = tf.multinomial(tf.log(p_left_and_right), num_samples=1)
 
