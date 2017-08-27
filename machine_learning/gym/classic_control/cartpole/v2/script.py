@@ -54,6 +54,7 @@ action = tf.multinomial(tf.log(p_left_and_right), num_samples=1)
 y = 1. - tf.to_float(action)
 cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(labels=y, logits=logits)
 optimizer = tf.train.AdamOptimizer(learning_rate=0.01)
+#optimizer = tf.train.MomentumOptimizer(learning_rate=0.01, momentum=0.9, use_nesterov=True)
 
 grads_and_vars = optimizer.compute_gradients(cross_entropy)
 gradients = [grad for grad, variable in grads_and_vars]
@@ -68,18 +69,18 @@ training_op = optimizer.apply_gradients(grads_and_vars_feed)
 init = tf.global_variables_initializer()
 saver = tf.train.Saver()
 
-summary_min = tf.Summary()
-summary_max = tf.Summary()
-summary_avg = tf.Summary()
-summary_dev = tf.Summary()
-summary_sps = tf.Summary()
+# summary_min = tf.Summary()
+# summary_max = tf.Summary()
+# summary_avg = tf.Summary()
+# summary_dev = tf.Summary()
+# summary_sps = tf.Summary()
 
-now = 2 #datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S")
-writer1 = tf.summary.FileWriter("./summary-{}/min2".format(now), tf.get_default_graph())
-writer2 = tf.summary.FileWriter("./summary-{}/max2".format(now), tf.get_default_graph())
-writer3 = tf.summary.FileWriter("./summary-{}/avg2".format(now), tf.get_default_graph())
-writer4 = tf.summary.FileWriter("./summary-{}/dev2".format(now), tf.get_default_graph())
-writer5 = tf.summary.FileWriter("./summary-{}/sps2".format(now), tf.get_default_graph())
+# now = 2 #datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S")
+# writer1 = tf.summary.FileWriter("./summary-{}/min3".format(now), tf.get_default_graph())
+# writer2 = tf.summary.FileWriter("./summary-{}/max3".format(now), tf.get_default_graph())
+# writer3 = tf.summary.FileWriter("./summary-{}/avg3".format(now), tf.get_default_graph())
+# writer4 = tf.summary.FileWriter("./summary-{}/dev3".format(now), tf.get_default_graph())
+# writer5 = tf.summary.FileWriter("./summary-{}/sps3".format(now), tf.get_default_graph())
 
 env = gym.make("CartPole-v1")
 n_games_per_update = 10
@@ -121,34 +122,34 @@ with tf.Session() as sess:
                 feed_dict[gradient_placeholder] = mean_gradients
             sess.run(training_op, feed_dict=feed_dict)
             if iteration % save_iterations == 0:
-                saver.save(sess, "./saves/model_{}.ckpt".format(iteration))
-                summary_score = []
-                summary_step = []
-                for _ in range(n_test):
-                    score = 0
-                    step = 0
-                    obs = env.reset()
-                    while True:
-                        act = action.eval(feed_dict={X: obs.reshape(1, n_inputs)})
-                        obs, reward, done, info = env.step(act[0][0])
-                        score += reward_calculator(obs)
-                        step += 1
-                        if is_done(obs) or done:
-                            break
-                    summary_score.append(score)
-                    summary_step.append(step)
-                summary_min.value.add(tag="score", simple_value=min(summary_score))
-                summary_max.value.add(tag="score", simple_value=max(summary_score))
-                summary_avg.value.add(tag="score", simple_value=sum(summary_score) / n_test)
-                summary_dev.value.add(tag="dev", simple_value=statistics.stdev(summary_score))
-                summary_sps.value.add(tag="autre", simple_value=sum(summary_score) / sum(summary_step))
-                writer1.add_summary(summary_min, global_step=iteration)
-                writer2.add_summary(summary_max, global_step=iteration)
-                writer3.add_summary(summary_avg, global_step=iteration)
-                writer4.add_summary(summary_dev, global_step=iteration)
-                writer5.add_summary(summary_sps, global_step=iteration)
+                saver.save(sess, "./saves/model_AdamOp_{}.ckpt".format(iteration))
+                # summary_score = []
+                # summary_step = []
+                # for _ in range(n_test):
+                #     score = 0
+                #     step = 0
+                #     obs = env.reset()
+                #     while True:
+                #         act = action.eval(feed_dict={X: obs.reshape(1, n_inputs)})
+                #         obs, reward, done, info = env.step(act[0][0])
+                #         score += reward_calculator(obs)
+                #         step += 1
+                #         if is_done(obs) or done:
+                #             break
+                #     summary_score.append(score)
+                #     summary_step.append(step)
+                # summary_min.value.add(tag="score", simple_value=min(summary_score))
+                # summary_max.value.add(tag="score", simple_value=max(summary_score))
+                # summary_avg.value.add(tag="score", simple_value=sum(summary_score) / n_test)
+                # summary_dev.value.add(tag="dev", simple_value=statistics.stdev(summary_score))
+                # summary_sps.value.add(tag="autre", simple_value=sum(summary_score) / sum(summary_step))
+                # writer1.add_summary(summary_min, global_step=iteration)
+                # writer2.add_summary(summary_max, global_step=iteration)
+                # writer3.add_summary(summary_avg, global_step=iteration)
+                # writer4.add_summary(summary_dev, global_step=iteration)
+                # writer5.add_summary(summary_sps, global_step=iteration)
     else:
-        saver.restore(sess, "./saves/model_1000.ckpt")
+        saver.restore(sess, "./saves/model_AdamOp_1000.ckpt")
         for i in range(1):
             score = 0
             step = 0
