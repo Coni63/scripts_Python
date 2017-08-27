@@ -89,7 +89,8 @@ with tf.Session() as sess:
             # writter.add_summary(vis_summary.eval(feed_dict={img_ph : image_x}))
             fig = plt.figure()
             plt.imshow(image_x[0].reshape((28,28)))
-            fig.savefig("./result/guess_{}_label_{}.png".format(predict, label_y))
+            fig.savefig(
+                "./result/guess_{}_label_{}_instance_{}.png".format(predict, label_y, iteration * batch_size + index))
 
     acc_test = accuracy.eval(feed_dict={X: mnist.test.images,
                                         y: mnist.test.labels})
