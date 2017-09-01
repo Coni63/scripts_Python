@@ -82,7 +82,11 @@ saver = tf.train.Saver()
 # writer4 = tf.summary.FileWriter("./summary-{}/dev3".format(now), tf.get_default_graph())
 # writer5 = tf.summary.FileWriter("./summary-{}/sps3".format(now), tf.get_default_graph())
 
+
+
 env = gym.make("CartPole-v1")
+env = gym.wrappers.Monitor(env, '/tmp/cartpole-v1', force=True)
+
 n_games_per_update = 10
 n_max_steps = 1000
 n_iterations = 1000
@@ -108,7 +112,7 @@ with tf.Session() as sess:
                     reward = reward_calculator(obs)
                     current_rewards.append(reward)
                     current_gradients.append(gradients_val)
-                    if is_done(obs) or done:
+                    if done:
                         break
                 all_rewards.append(current_rewards)
                 all_gradients.append(current_gradients)
@@ -122,7 +126,14 @@ with tf.Session() as sess:
                 feed_dict[gradient_placeholder] = mean_gradients
             sess.run(training_op, feed_dict=feed_dict)
             if iteration % save_iterations == 0:
-                saver.save(sess, "./saves/model_AdamOp_{}.ckpt".format(iteration))
+                saver.save(sess, "./saves/video_model_AdamOp_{}.ckpt".format(iteration))
+                obs = env.reset()
+                while True:
+                    env.render()
+                    act = action.eval(feed_dict={X: obs.reshape(1, n_inputs)})
+                    obs, reward, done, info = env.step(act[0][0])
+                    if done:
+                        break
                 # summary_score = []
                 # summary_step = []
                 # for _ in range(n_test):
@@ -160,6 +171,6 @@ with tf.Session() as sess:
                 obs, reward, done, info = env.step(act[0][0])
                 score += reward_calculator(obs)
                 step += 1
-                if is_done(obs) or done:
+                if done:
                     break
             print("Score : {} in {} steps".format(score, step))

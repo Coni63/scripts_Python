@@ -1,14 +1,30 @@
 import numpy as np
 import tensorflow as tf
 import gym
+import math
+
+def trigo_to_angle(env):
+    cos, sin = env[0], env[1]
+    alpha_quarter = math.acos(cos)
+    if cos > 0:
+        if sin > 0:
+            return -alpha_quarter
+        else:
+            return alpha_quarter
+    else:
+        if sin > 0:
+            return math.pi - alpha_quarter
+        else:
+            return math.pi + alpha_quarter
+
 
 # Create Model
 tf.reset_default_graph()
 tf.set_random_seed(42)
 np.random.seed(42)
 
-n_inputs = 3
-n_hidden = 4
+n_inputs = 4
+n_hidden = 6
 n_outputs = 2
 
 learning_rate = 0.01
@@ -18,16 +34,16 @@ initializer = tf.contrib.layers.variance_scaling_initializer()
 X = tf.placeholder(tf.float32, shape=[None, n_inputs])
 
 hidden = tf.layers.dense(X, n_hidden, activation=tf.nn.elu, kernel_initializer=initializer)
-hidden2 = tf.layers.dense(hidden, n_hidden, activation=tf.nn.elu, kernel_initializer=initializer)
-logits = tf.layers.dense(hidden2, n_outputs)
-outputs = tf.multiply(2, tf.nn.sigmoid(logits))
-p_left_and_right = tf.concat(axis=1, values=[outputs, 1 - outputs])
-action = tf.multinomial(tf.log(p_left_and_right), num_samples=1)
+#hidden2 = tf.layers.dense(hidden, n_hidden, activation=tf.nn.elu, kernel_initializer=initializer)
+logits = tf.layers.dense(hidden, n_outputs)
+activation = tf.nn.tanh(logits)
 
-y = 1. - tf.to_float(action)
-cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(labels=y, logits=logits)
+outputs = tf.multiply(2.00, activation)
+
+cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(labels=outputs, logits=logits)
 optimizer = tf.train.AdamOptimizer(learning_rate)
 grads_and_vars = optimizer.compute_gradients(cross_entropy)
+
 gradients = [grad for grad, variable in grads_and_vars]
 gradient_placeholders = []
 grads_and_vars_feed = []
@@ -63,12 +79,11 @@ n_iterations = 250
 save_iterations = 10
 discount_rate = 0.95
 training = False
-test = False
 
 with tf.Session() as sess:
     if training:
-        saver.restore(sess, "./my_policy_net_pg_3.ckpt")
-        #init.run()
+        init.run()
+        #saver.restore(sess, "./my_policy.ckpt")
         for iteration in range(n_iterations):
             print("\rIteration: {}".format(iteration), end="")
             all_rewards = []
@@ -78,7 +93,9 @@ with tf.Session() as sess:
                 current_gradients = []
                 obs = env.reset()
                 for step in range(n_max_steps):
-                    action_val, gradients_val = sess.run([action, gradients], feed_dict={X: obs.reshape(1, n_inputs)})
+                    alpha = trigo_to_angle(obs)
+                    obs = np.array([alpha, *obs])
+                    action_val, gradients_val = sess.run([outputs, gradients], feed_dict={X: obs.reshape(1, n_inputs)})  #
                     obs, reward, done, info = env.step(action_val[0])
                     current_rewards.append(reward)
                     current_gradients.append(gradients_val)
@@ -96,29 +113,17 @@ with tf.Session() as sess:
                 feed_dict[gradient_placeholder] = mean_gradients
             sess.run(training_op, feed_dict=feed_dict)
             if iteration % save_iterations == 0:
-                saver.save(sess, "./my_policy_net_pg_3.ckpt")
+                saver.save(sess, "./my_policy.ckpt")
+                print([sum(x) for x in all_rewards])
     else:
-        if test:
-            score = [ [] for _ in range(3)]
-            savers = ["./my_policy_net_pg_1.ckpt", "./my_policy_net_pg_2.ckpt", "./my_policy_net_pg_3.ckpt"]
-            for i, save in enumerate(savers):
-                saver.restore(sess, save)
-                for _ in range(50):
-                    temp = 0
-                    obs = env.reset()
-                    while True:
-                        act = action.eval(feed_dict={X: obs.reshape(1, n_inputs)})
-                        obs, reward, done, info = env.step(act[0])
-                        temp += reward
-                    score[i].append(temp)
-                print(sum(score[i])/50)
-        else:
-            score = 0
-            saver.restore(sess, "./my_policy_net_pg_3.ckpt")
-            obs = env.reset()
-            while True:
-                env.render()
-                act = action.eval(feed_dict={X : obs.reshape(1, n_inputs)})
-                obs, reward, done, info = env.step(act[0])
-                score += reward
-            print("Final Score : ", score)
+        score = 0
+        saver.restore(sess, "./my_policy.ckpt")
+        obs = env.reset()
+        while True:
+            alpha = trigo_to_angle(obs)
+            obs = np.array([alpha, *obs])
+            env.render()
+            act = outputs.eval(feed_dict={X : obs.reshape(1, n_inputs)})
+            obs, reward, done, info = env.step(act[0])
+            score += reward
+        print("Final Score : ", score)
