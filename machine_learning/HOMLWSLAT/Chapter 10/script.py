@@ -59,7 +59,7 @@ saver = tf.train.Saver()
 
 # Tensorborad info
 acc_summary = tf.summary.scalar("Accuracy", accuracy)
-file_writter = tf.summary.FileWriter("/saves/summary/BN_MO_elu-{}-{}/".format(size_hidden_layer_1, size_hidden_layer_2), tf.get_default_graph())
+file_writter = tf.summary.FileWriter("./saves/summary/BN_MO_elu-{}-{}/".format(size_hidden_layer_1, size_hidden_layer_2), tf.get_default_graph())
 
 training_step = False
 mnist = input_data.read_data_sets("/data/")
@@ -80,7 +80,7 @@ with tf.Session() as sess:
     if not training_step:
         fig = plt.figure()
         #saver = tf.train.import_meta_graph("/saves/my_model_chapter10.ckpt.meta")
-        saver.restore(sess, "/saves/my_model_chapter10_2.ckpt")
+        saver.restore(sess, "./saves/my_model_chapter10_2.ckpt")
         gen_x = batch(mnist.test.images, batch_size)
         gen_y = batch(mnist.test.labels, batch_size)
         for iteration in range(mnist.test.num_examples // batch_size):
@@ -105,5 +105,5 @@ with tf.Session() as sess:
             accuracy_str = acc_summary.eval(feed_dict={X: X_test, y: mnist.test.labels})
             file_writter.add_summary(accuracy_str, epoch)
             print(epoch, accuracy.eval(feed_dict={X: X_test, y: mnist.test.labels}))
-        save_path = saver.save(sess, "/saves/my_model_chapter10_2.ckpt")
+        save_path = saver.save(sess, "./saves/my_model_chapter10_2.ckpt")
     file_writter.close()

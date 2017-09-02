@@ -1,0 +1,6 @@
+model_checkpoint_path: "modele1_14_360.ckpt"
+all_model_checkpoint_paths: "modele1_14_320.ckpt"
+all_model_checkpoint_paths: "modele1_14_330.ckpt"
+all_model_checkpoint_paths: "modele1_14_340.ckpt"
+all_model_checkpoint_paths: "modele1_14_350.ckpt"
+all_model_checkpoint_paths: "modele1_14_360.ckpt"

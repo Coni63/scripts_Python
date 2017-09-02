@@ -399,6 +399,105 @@
 #     phrase = "Diamètre: {:8.2f} cm - Section: {:8.2f} cm² - Aire: {:8.2f} cm² - Volume: {:8.2f} cm³\n"
 #     print(phrase.format(diam, section, aire, vol))
 
-import math
-max_angle = math.radians(20)
-print(max_angle)
+# import math
+# max_angle = math.radians(20)
+# print(max_angle)
+
+# def batch(elem, batch_size):
+#     size = len(elem)
+#     for i in range(size//batch_size):
+#         yield elem[:batch_size]
+#         elem = elem[batch_size:]
+#
+# a = list(range(50))
+# gen = batch(a, 5)
+#
+# print(next(gen))
+# print(next(gen))
+# print(next(gen))
+
+# import numpy as np
+#
+# a = np.random.rand(50) > 0.5
+# print(a)
+#
+# c = np.random.randint(0,5, 50)
+# print(c)
+#
+# b = np.argwhere(a==True)
+# print(b)
+#
+# print(c[b])
+#
+# import sys
+# from PyQt5.QtGui import *
+# from PyQt5.QtCore import *
+# from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
+#
+# def window():
+#     win = QWidget()
+#     win.setGeometry(100, 100, 800, 300)  # La taille est arbitraire
+#
+#     # ==== Début des erreurs de type NameError ====
+#     # Création de deux boutons (1) et (2) reliés aux fonctions f1 et f2
+#     # Bouton n°1
+#     b1 = QPushButton("foo", win)
+#     b1.clicked.connect(f1)
+#
+#     # Bouton n°2
+#     b2 = QPushButton("bar", win)
+#     b2.clicked.connect(f2)
+#
+#     # Création d'un menu horizontal composé des deux boutons
+#     # menu = QHBoxLayout()
+#     # menu.addWidget(b1)
+#     # menu.addWidget(b2)
+#
+#     # Affichage des widgets de l'application
+#     # win.setLayout(menu)  # Ajout de la barre de menu dans fenetre
+#     # ==== Fin des erreurs de type NameError ====
+#     win.setTitle("Application test")
+#     win.show()
+#     sys.exit(app.exec_())
+#
+#
+# def f1():
+#     print("Bouton n°1 a été cliqué !")
+#
+#
+# def f2():
+#     print("Bouton n°2 a été cliqué !")
+#
+#
+# if __name__ == "__main__":
+#     app = QGuiApplication(sys.argv)
+#     window()
+
+# import itertools
+#
+# list1=['cat','animal']
+# list2=['dog','animal']
+# list3=['crow','bird']
+#
+# l = list(zip(list1, list2, list3))
+#
+#
+# for k, l in itertools.groupby(l), key= lambda x:x[1]):
+#     print(k, l)
+
+# import numpy as np
+# s = np.random.normal(22.5, 0.1, 144)
+# arr = [[x] for x in s]
+# print(arr)
+
+# import numpy as np
+# from sklearn.svm import LinearSVC
+#
+# X = [[1,1], [2,0], [2,3]]
+# y = [0, 0, 1]
+#
+# svc = LinearSVC(C=1, loss="hinge")
+# svc.fit(X, y)
+#
+#
+# print(svc.coef_ , svc.intercept_ )
