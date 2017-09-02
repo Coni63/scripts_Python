@@ -88,7 +88,7 @@ if __name__ == "__main__":
         print(each)
 
     obs_gen = env.reset()[:]
-    for generation in range(50):
+    for generation in range(100):
         print("###########  GENERATION {} ##########".format(generation))
         # Evaluation
         for indiv in pop.population:
@@ -144,3 +144,5 @@ if __name__ == "__main__":
         #print(obs)
         action, error, sum_error = best.activation(obs, error, sum_error)
         obs, reward, done, info = env.step([action])
+        if done:
+            break
