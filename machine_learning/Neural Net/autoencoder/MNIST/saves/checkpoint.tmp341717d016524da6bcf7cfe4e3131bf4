@@ -1,6 +1,6 @@
-model_checkpoint_path: "modele3_16_10.ckpt"
-all_model_checkpoint_paths: "modele3_15_340.ckpt"
+model_checkpoint_path: "modele3_16_20.ckpt"
 all_model_checkpoint_paths: "modele3_15_350.ckpt"
 all_model_checkpoint_paths: "modele3_15_360.ckpt"
 all_model_checkpoint_paths: "modele3_16_0.ckpt"
 all_model_checkpoint_paths: "modele3_16_10.ckpt"
+all_model_checkpoint_paths: "modele3_16_20.ckpt"
