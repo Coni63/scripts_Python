@@ -501,3 +501,65 @@
 #
 #
 # print(svc.coef_ , svc.intercept_ )
+
+# import numpy as np
+# import matplotlib.pyplot as plt
+# from matplotlib import pylab
+# import os
+# import time
+#
+# def generator():
+#     while True:
+#         yield np.random.random(2)
+#
+# plt.axis() #[0, 1, 0, 1]
+# plt.ion()
+#
+# # for i in range(100):
+# #     x, y = np.random.random(2)
+# #     plt.scatter(i, y)
+# #     plt.pause(0.05)
+# gen = generator()
+#
+# while True:
+#     x, y = next(gen)
+#     plt.scatter(x, y)
+#     plt.pause(0.5)
+# plt.show()
+#
+# pylab.waitforbuttonpress(timeout=-1)
+#
+# # while True:
+# #     plt.pause(0.05)
+
+# import datetime
+# import time
+#
+# def to_date(str_date):
+#     return datetime.datetime.strptime(str_date, "%d/%m/%Y")
+#
+# list1=["04/05/2004","07/02/2002","12/05/1993"]
+#
+# #conversion
+# list1 = list(map(to_date, list1))
+# # ou
+# list1 = [to_date(x) for x in list1]
+#
+# #trie
+# list1.sort()
+#
+# # affichage en format anglais
+# for date in list1:
+#     print(datetime.datetime.strftime(date, "%m-%d-%Y"))
+
+# import numpy as np
+n=2
+# mat = np.zeros(dtype=np.bool, shape=(n,n))
+# print(mat)
+# for line in range(n):
+#     for col in range(n):
+#         mat[line, col] = (1 == int(input("t")))
+# print(mat)
+
+mat = [[False for _ in range(n)] for _ in range(n)]
+print(mat)

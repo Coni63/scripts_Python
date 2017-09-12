@@ -74,6 +74,10 @@
 #     for each in to_delete:
 #         del each
 #
+#     print(to_delete)
+#
+#     break
+#
 #     new_indiv = []
 #     for elem in population_list:
 #         if random.random() < cross_ratio and len(new_indiv) < population//2:
@@ -91,6 +95,7 @@
 #
 #     print(population_list[0].score)
 #     best_every_gen.append(population_list[0])
+
 
 import random
 import math
@@ -174,8 +179,7 @@ while current_generation < max_generation and improvement < 100:
     population_list = population_list[:population // 2]
 
     # Delete all instances not kept to free memory
-    for each in to_delete:
-        del each
+    to_delete.clear()
 
     # For each remaining elements, we do crossover
     new_indiv = []

@@ -89,8 +89,7 @@ class Population:
         self.best_individu = population_list[0]
 
         # Delete all instances not kept to free memory
-        for each in to_delete:
-            del each
+        to_delete.clear()
 
         new_indiv = []
         # croisement

@@ -110,8 +110,7 @@ def update(df):
     population_list = population_list[:population//2]
 
     # Delete all instances not kept to free memory
-    for each in to_delete:
-        del each
+    to_delete.clear()
 
     new_indiv = []
     # croisement
