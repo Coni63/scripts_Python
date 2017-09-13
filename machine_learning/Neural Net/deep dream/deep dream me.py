@@ -11,29 +11,15 @@ import scipy.misc
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2' # hide log and warning
 
 def main():
-    # Step 1 - download google's pre-trained neural network
-    url = 'https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip'
-    data_dir = '/data/'
-    model_name = os.path.split(url)[-1]
-    local_zip_file = os.path.join(data_dir, model_name)
-    if not os.path.exists(local_zip_file):
-        # Download
-        model_url = urllib.request.urlopen(url)
-        with open(local_zip_file, 'wb') as output:
-            output.write(model_url.read())
-        # Extract
-        with zipfile.ZipFile(local_zip_file, 'r') as zip_ref:
-            zip_ref.extractall(data_dir)
-
     # start with a gray image with a little noise
     img_noise = np.random.uniform(size=(224, 224, 3)) + 100.0
 
-    model_fn = 'tensorflow_inception_graph.pb'
+    model_fn = '/data/tensorflow_inception_graph.pb'
 
     # Step 2 - Creating Tensorflow session and loading the model
     graph = tf.Graph()
     sess = tf.InteractiveSession(graph=graph)
-    with tf.gfile.FastGFile(os.path.join(data_dir, model_fn), 'rb') as f:
+    with tf.gfile.FastGFile(model_fn, 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
     t_input = tf.placeholder(np.float32, name='input')  # define the input tensor
@@ -47,13 +33,6 @@ def main():
     print('Number of layers', len(layers))
     print('Total number of feature channels:', sum(feature_nums))
 
-    #####HELPER FUNCTIONS. I didn't go over these in the video for times sake. They are mostly just formatting functions. Scroll
-    # to the bottom #########################################################################################################
-    ########################################################################################################################
-    ############################################################
-
-    # Helper functions for TF Graph visualization
-    # pylint: disable=unused-variable
     def strip_consts(graph_def, max_const_size=32):
         """Strip large constant values from graph_def."""
         strip_def = tf.GraphDef()
@@ -140,14 +119,6 @@ def main():
                 grad[y:y + sz, x:x + sz] = g
         return np.roll(np.roll(grad, -sx, 1), -sy, 0)
 
-        # BACK TO CODE IN THE VIDEO###########################################################################################
-
-    ########################################################################################################
-    ##############################################################################
-
-    # CHALLENGE - Write a function that outputs a deep dream video
-    # def render_deepdreamvideo():
-
 
     def render_deepdream(t_obj, img0=img_noise,
                          iter_n=10, step=1.5, octave_n=4, octave_scale=1.4):
@@ -174,13 +145,9 @@ def main():
                 img += g * (step / (np.abs(g).mean() + 1e-7))
 
             # img = img/255.0
-            # this will usually be like 3 or 4 octaves
-            # Step 5 output deep dream image via matplotlib
-            #showarray(img / 255.0)
 
         return img
 
-            # Step 3 - Pick a layer to enhance our image
 
     layer = 'mixed4d_3x3_bottleneck_pre_relu'
     channel = 139  # picking some feature channel to visualize
