@@ -552,14 +552,84 @@
 # for date in list1:
 #     print(datetime.datetime.strftime(date, "%m-%d-%Y"))
 
-# import numpy as np
-n=2
-# mat = np.zeros(dtype=np.bool, shape=(n,n))
-# print(mat)
-# for line in range(n):
-#     for col in range(n):
-#         mat[line, col] = (1 == int(input("t")))
+# # import numpy as np
+# n=2
+# # mat = np.zeros(dtype=np.bool, shape=(n,n))
+# # print(mat)
+# # for line in range(n):
+# #     for col in range(n):
+# #         mat[line, col] = (1 == int(input("t")))
+# # print(mat)
+#
+# mat = [[False for _ in range(n)] for _ in range(n)]
 # print(mat)
 
-mat = [[False for _ in range(n)] for _ in range(n)]
-print(mat)
+# import numpy as np
+#
+# X = np.array([-0.78768,-1.51760513,0.74416271,-0.62288928])
+# Y = np.array([-34.59703199, -30.79543532, 19.31018182, -19.44809959])
+# b = [52,13,29,32]
+#
+#
+# for a in b:
+#     z = Y - a*X
+#     print(np.matmul(np.transpose(z), z))
+
+# import os
+# import pickle
+#
+# def create_file():
+#     emplacement = input("A quel emplacement voudrez-vous enregistrer le fichier (le nom du fichier est genere automatiquement) ?\n")
+#     emplacement_bf = os.path.join(emplacement, "generateur_de_nom.txt")
+#     open(emplacement_bf, 'a').close()   # creer un fichier vide (c'est l'objectif de la fonction)
+#     with open('save.pickle', 'wb') as f:
+#         pickle.dump(emplacement_bf, f)
+#     return emplacement_bf               # pour avoir ensuite l'url directement
+#
+# def charger(save_file = None):
+#     if save_file is None:               # si tu ne founi pas d'url il va chercher un pickle
+#         try:
+#             save_file = pickle.load(open("save.pickle", "rb"))
+#         except:
+#             print("Pas de sauvegarde")
+#             return False
+#
+#     with open(save_file, 'r') as f:
+#         for line in f:
+#             print(line)
+#
+# def generate(save_file = None):
+#     if save_file is None:
+#         save_file = create_file()                   # si tu ne fournis pas de fichier il en crée un
+#
+#     with open(save_file, 'w') as f:
+#         f.write("Hello World")                      # ecrire ce que tu veux dedans
+#
+# if __name__ == "__main__":
+#     #create_file()           # creer le fichier vide a l'url voulu et sauvegarde l'url dans pickle
+#     #generate()              # me demande l'url pour creer le fichier
+#     #generate("F:/Nicolas/PycharmProjects/Python_Scripts/generateur_de_nom.txt")   # Ajoute Hello world au fichier
+#     #charger()                                                                      # Affiche Hello World s'il trouve le pickle
+#     #charger("F:/Nicolas/PycharmProjects/Python_Scripts/generateur_de_nom.txt")     # Affiche Hello World
+#
+#
+
+
+# liste = ['orange','cerveau','elephant','tri','chat','orangoutan','dinosaures']
+# print(list(filter(lambda x: len(x)>8 ,liste))) => ['orangoutan', 'dinosaures']
+
+# import random
+#
+# liste = ['orange', 'cerveau', 'elephant', 'tri', 'chat', 'orangoutan', 'dinosaures']
+# liste = [mot for mot in liste if len(mot) > 8]
+# choix = random.sample(liste, 1)
+#
+# a = 0
+# while (a <= 8):
+#     essaie = input("Veuillez deviner une lettre qui fait partie du mot")
+#     for i, elt in enumerate(choix[0]):
+#         if elt == essaie:
+#             print(elt)
+#         else:
+#             print("*")
+#     a = a + 1
