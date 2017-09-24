@@ -3,45 +3,56 @@ import math
 import re
 import time
 
-morse = {"A": ".-", "B": "-...", "C": "-.-.", "D": "-..", "E": ".", "F": "..-.", "G": "--.", "H": "....", "I": "..",
+def check_iter(sentence = "", pos = 0):
+    for code, word in dico.items():
+        if l[pos:pos + len(code)] == code:
+            sentence += word
+            #print(sentence, file=sys.stderr)
+            if pos + len(code) == len(l):
+                global a
+                a += 1
+                return True
+            else:
+                next_pos = pos + len(code)
+                check_iter(sentence = sentence, pos = next_pos)
+
+
+def str_to_morse(word):
+    conv = ""
+    for each in word:
+        conv += morseAlphabet[each]
+    return conv
+
+
+morseAlphabet = {"A": ".-", "B": "-...", "C": "-.-.", "D": "-..", "E": ".", "F": "..-.", "G": "--.", "H": "....", "I": "..",
          "J": ".---", "K": "-.-", "L": ".-..", "M": "--", "N": "-.", "O": "---", "P": ".--.", "Q": "--.-", "R": ".-.",
          "S": "...", "T": "-", "U": "..-", "V": "...-", "W": ".--", "X": "-..-", "Y": "-.--", "Z": "--.."}
+
+inverseMorseAlphabet=dict((v,k) for (k,v) in morseAlphabet.items())
+
 dico = {}
 
 l = input()
 print(l, file=sys.stderr)
 
 s = time.time()
-
+a = 0
 n = int(input())
 for i in range(n):
     w = input()
     w = w.upper()
-    conv = ""
-    for each in w:
-        conv += morse[each]
-    dico[w] = conv
+    morse_code = str_to_morse(w)
+    dico[morse_code] = w
 
-print(dico, file=sys.stderr)
+# list_words = [input().upper() for x in range(n)]
+# print(list_words, file=sys.stderr)
+
+#print(l[4:4+7])
 
 print(time.time() - s, file=sys.stderr)
 
-count = 0
-t = l[:]
-r = None
-while r != "":
-    r = ""
-    while True:
-        for key, code in dico.items():
-            if code == t[:len(code)]:
-                t = t[len(code):]
-                r += key
-                del dico[key]
-                break  # for
-        if len(t) == 0:
-            count += 1
-            break
-    print(r, file=sys.stderr)
-print(count)
+check_iter()
+
+print(a)
 
 # To debug: print("Debug messages...", file=sys.stderr)
