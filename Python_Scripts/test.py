@@ -633,3 +633,59 @@
 #         else:
 #             print("*")
 #     a = a + 1
+
+# class Foo:
+#     def __init__(self, nom, val):
+#         self.nom = nom
+#         self.score = val.get("score", 0)
+#         self.partie = val.get("parties", 0)
+#
+#     def __repr__(self):
+#         return "{} a joue {} parties et a {} pts".format(self.nom, self.score, self.partie)
+#
+# tableau = {
+# 'Ludovic': {'score': 1, 'parties': 1},
+# 'Bertrand': {'score': 45, 'parties': 14},
+# 'Joseph': {'score': 47, 'parties': 45},
+# }
+#
+# instances = []
+#
+# for key, value in tableau.items():
+#     obj = Foo(key, value)
+#     print(obj)
+#     instances.append(obj)
+#
+# print(instances)
+
+# import matplotlib.pyplot as plt
+# import math
+#
+# m = 0.055
+# k = 0.0187
+# g = 9.81
+#
+# def Trajectoiref(x_min, x_max, nb_step, X0, Y0, V0, alpha):
+#     alpha = math.radians(alpha)
+#     step = (x_max - x_min) / nb_step
+#     T = 0 #[x_min + step*i for i in range(nb_step)]        # equivaut a un linspace (ca ne te sert pas dans ton code donc pas besoin de le calculer ensuite
+#     X = X0
+#     Y = Y0
+#     V_x = V0 * math.cos(alpha)
+#     V_y = V0 * math.sin(alpha)
+#     for _ in range(nb_step*2):
+#         X += V_x * step
+#         Y += V_y * step
+#         V_x -= step*((k / m)*V_x**2)
+#         V_y -= step*((k / m)*V_y**2)
+#         V_y -= 9.81*step/1000
+#         #print(T, X, Y, V_x, V_y)
+#         #V = math.sqrt(V_x**2 + V_y**2)
+#         plt.scatter(X, Y)
+#     plt.show()
+#     #return (T, X, Y, V_x, V_y)
+#
+#
+# T, X, Y, Xp, Yp = Trajectoiref(0, 1, 100, 0, 0, 3, 18)
+# # plt.plot(X, Y)  # afficher les courbes
+# # plt.show()
