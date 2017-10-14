@@ -1,0 +1,13 @@
+{
+    "type": "record",
+    "namespace": "com.lefabuleuxmandarindor",
+    "name": "Plat",
+    "doc": "Stocke les plats du retaurant le fabuleux mandarin d'or",
+    "fields": [
+        {"name": "nom", "type": "string"},
+        {"name": "origine", "type": ["string", "null"]},
+        {"name": "ingredients", "type": {"type": "array", "items": "string"}, "default": []},
+        {"name": "prix", "type": "float"},
+        {"name": "type", "type": {"type": "enum", "name": "type", "symbols": ["plat", "accompagnement"]}}
+    ]
+}
