@@ -689,3 +689,83 @@
 # T, X, Y, Xp, Yp = Trajectoiref(0, 1, 100, 0, 0, 3, 18)
 # # plt.plot(X, Y)  # afficher les courbes
 # # plt.show()
+
+# a = "1101"
+# s=0
+# for power, digit in enumerate(a[::-1]):
+#     s+=int(digit)*(2**power)
+#
+# print(s)
+
+# import multiprocessing
+# import numpy as np
+# import time
+#
+# L = list(range(1000000))
+# np.random.shuffle(L)
+#
+#
+# def f(x=None):
+#     (L[:].sort())
+#     return 0
+#
+#
+# t1 = time.clock()
+# with multiprocessing.Pool(processes=3) as pool:
+#     pool.map(f, range(5))
+# print(time.clock() - t1)
+#
+# t1 = time.clock()
+# results = [f() for _ in range(5)]
+# print(time.clock() - t1)
+
+# import numpy as np
+#
+# def factolu(A):
+#     n=np.shape(A)[0]
+#     L = np.identity(n)
+#     U = np.zeros(shape=(n,n))
+#     for i in range(0, n-1):
+#         for j in range(i+1, n):
+#             L[j,i] = A[j,i]/A[i,i]
+#             for k in range(i + 1, n):
+#                 A[j:k] -= L[j, i] * U[i, k]
+#         for j in range(i, n):
+#             U[i,j] = A[i,j]
+#     U[-1,-1] = A[-1,-1]
+#     return L, U
+#
+# t = np.random.random(size=(3,3))
+# print(t, "\n")
+# l, u = factolu(t)
+# print(l, "\n\n", u, "\n")
+#
+# print(np.matmul(l, u))
+#
+# import functools
+# ton_booleen = functools.reduce(lambda a, b: a * b, list(map(ord, ["c", "a"])))%2==0
+# print(ton_booleen)
+
+
+import seaborn as sns
+import pylab as plt
+
+
+def onpick(event):
+    print(event)
+    print(event.__dict__)
+
+
+iris = sns.load_dataset("iris")
+species = iris.pop("species")
+clusterobj = sns.clustermap(iris)
+
+clusterobj.ax_heatmap.set_xticklabels([])
+clusterobj.ax_heatmap.set_yticklabels([])
+
+clusterobj.fig.canvas.mpl_connect('figure_leave_event', onpick)
+
+print(clusterobj.ax_row_dendrogram)
+print(clusterobj.dendrogram_row.dendrogram)
+
+plt.show()
