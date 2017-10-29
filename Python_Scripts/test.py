@@ -746,26 +746,34 @@
 # ton_booleen = functools.reduce(lambda a, b: a * b, list(map(ord, ["c", "a"])))%2==0
 # print(ton_booleen)
 
+#
+# import seaborn as sns
+# import pylab as plt
+#
+#
+# def onpick(event):
+#     print(event)
+#     print(event.__dict__)
+#
+#
+# iris = sns.load_dataset("iris")
+# species = iris.pop("species")
+# clusterobj = sns.clustermap(iris)
+#
+# clusterobj.ax_heatmap.set_xticklabels([])
+# clusterobj.ax_heatmap.set_yticklabels([])
+#
+# clusterobj.fig.canvas.mpl_connect('figure_leave_event', onpick)
+#
+# print(clusterobj.ax_row_dendrogram)
+# print(clusterobj.dendrogram_row.dendrogram)
+#
+# plt.show()
 
-import seaborn as sns
-import pylab as plt
-
-
-def onpick(event):
-    print(event)
-    print(event.__dict__)
-
-
-iris = sns.load_dataset("iris")
-species = iris.pop("species")
-clusterobj = sns.clustermap(iris)
-
-clusterobj.ax_heatmap.set_xticklabels([])
-clusterobj.ax_heatmap.set_yticklabels([])
-
-clusterobj.fig.canvas.mpl_connect('figure_leave_event', onpick)
-
-print(clusterobj.ax_row_dendrogram)
-print(clusterobj.dendrogram_row.dendrogram)
-
-plt.show()
+# import numpy as np
+# t = np.array([[[0, 0.106, 0.587, 0.1, 0, 0.171, 0.007]]])
+# t2 = t[0]/t[0].sum(axis=1)
+# a = np.random.choice(list(range(7)), size=1, p=t2[0])
+# out = np.zeros_like(t)
+# out[0,0,a] = 1
+# print(a, out)

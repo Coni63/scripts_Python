@@ -1,8 +1,13 @@
 #!/usr/bin/python
 
+###
+# Source : http://christianherta.de/lehre/dataScience/machineLearning/neuralNetworks/reberGrammar.php
+###
+
 import numpy as np
 
 chars='BTSXPVE'
+emb_chars = "TP"
 
 graph = [[(1,5),('T','P')],
          [(1,2),('S','X')],
@@ -11,7 +16,6 @@ graph = [[(1,5),('T','P')],
          [(3,2),('V','P')],
          [(4,5),('V','T')]
          ]
-
 
 def in_grammar(word):
     if word[0] != 'B':
@@ -81,9 +85,6 @@ def get_n_examples(n, minLength=10):
     return examples
 
 
-emb_chars = "TP"
-
-
 def get_one_embedded_example(minLength=10):
     i, o = get_one_example(minLength)
     emb_char = emb_chars[np.random.randint(0, len(emb_chars))]
@@ -105,4 +106,3 @@ def get_n_embedded_examples(n, minLength=10):
     for i in range(n):
         examples.append(get_one_embedded_example(minLength))
     return examples
-
