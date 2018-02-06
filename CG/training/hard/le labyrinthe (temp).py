@@ -1,9 +1,10 @@
 import sys
 import math
+import copy
 
-reverse = {"LEFT":"RIGHT", "RIGHT":"LEFT", "UP":"DOWN", "DOWN":"UP"}
+reverse = {"LEFT":"RIGHT", "RIGHT":"LEFT", "UP":"DOWN", "DOWN":"UP", None: None}
 change_dir = {"LEFT":"DOWN", "RIGHT":"UP", "UP":"LEFT", "DOWN":"RIGHT"}
-choice = {"UP":["DOWN","RIGHT","LEFT"],"DOWN":["RIGHT","LEFT","UP"],"RIGHT":["DOWN","LEFT","UP"],"LEFT":["DOWN","RIGHT","UP"]}
+choice = {"UP":["UP","RIGHT","LEFT"],"DOWN":["DOWN","RIGHT","LEFT"],"RIGHT":["RIGHT","DOWN","UP"],"LEFT":["LEFT","DOWN","UP"]}
 
 UNKNOWN = '?'
 PART_OF_PATH = '.'
@@ -12,126 +13,121 @@ OBSTACLE = '#'
 DEAD_END = '-'
 START = 'T'
 END = 'C' 
+RETURN = 'X'
 
-class new_carte():
-    def __init__(self, la_map):
-        self.maze = la_map
+class Maze():
+    def __init__(self, _map):
+        self.maze = _map
         self.start = []
         self.end = []
+        self.kirk_pos = []
+        self.status = 0  # 0 = Explo, 1 = Return
+        self.distance = 0
+        self.actions = []
     
-    def merge(self, new):
-        for y in range(r):
-            #self.status[y]={}
-            for x in range(c):
-                if self.maze[y][x] == UNKNOWN and new[y][x] != UNKNOWN:
-                    self.maze[y] = self.maze[y][:x] + new[y][x] + self.maze[y][x+1:]
-                if new[y][x] == END and self.end == []:
-                    self.end = [y,x]
-                #if self.maze[y][x] == "X":
-                #    self.maze[y] = self.maze[y][:x] + new[y][x] + self.maze[y][x+1:]
-                #if self.maze[y][x] == ".":
-                #    self.status[y][x]=PART_OF_PATH
-                #elif self.maze[y][x] == "#":
-                #    self.status[y][x]=OBSTACLE
-                #elif self.maze[y][x] == "X":
-                #    self.status[y][x]=TRIED
-                #elif self.maze[y][x] == "$":
-                #    self.status[y][x]=DEAD_END
+    def update(self, row, idx):
+        for col in range(c):
+            if self.maze[idx][col] == UNKNOWN and row[col] != UNKNOWN:
+                self.maze[idx][col] = row[col]
+            if row[col] == END and self.end == []:
+                self.end = [idx, col]
                 
     def show(self):
-        for y in range(r):
-            print(self.maze[y], file=sys.stderr)
-    
-class aDallas():
-    def __init__(self):
-        self.path = [] #en y,x
-        self.posi = [] #en y,x
-        self.retour = False
-        self.direction = None
-                    
-    def init_direction(self):
-        if self.look("LEFT") != OBSTACLE:
-			self.direction = "LEFT"
-		elif self.look("RIGHT") != OBSTACLE:
-			self.direction = "RIGHT"
-		elif self.look("UP") != OBSTACLE:
-			self.direction = "UP"
-		else:
-			self.direction = "DOWN"
-    
+        for each in self.maze:
+            print("".join(each), file=sys.stderr)
+
+    def evaluate_direction(self, direction):
+        view = self.look(direction)
+        if view not in [OBSTACLE, TRIED]:
+            return 1
+        elif view == TRIED:
+            return 2
+        return 0
+
     def look(self, direction):
-		global full_map
         if direction == "UP":
-            return full_map.maze[self.posi[0]-1][self.posi[1]]
+            return self.maze[self.kirk_pos[0] - 1][self.kirk_pos[1]]
         elif direction == "DOWN":
-            return full_map.maze[self.posi[0]+1][self.posi[1]]
+            return self.maze[self.kirk_pos[0] + 1][self.kirk_pos[1]]
         elif direction == "RIGHT":
-            return full_map.maze[self.posi[0]][self.posi[1]+1]
+            return self.maze[self.kirk_pos[0]][self.kirk_pos[1] + 1]
         elif direction == "LEFT":
-            return full_map.maze[self.posi[0]][self.posi[1]-1] 
-            
-    def dropBreadCrumb(self):
-		global full_map
-        x = self.posi[1]
-        y = self.posi[0]
-        if full_map.maze[y][x] == PART_OF_PATH:
-            full_map.maze[y] = full_map.maze[y][:x] + TRIED + full_map.maze[y][x+1:]
-        elif full_map.maze[y][x] == TRIED:
-            full_map.maze[y] = full_map.maze[y][:x] + OBSTACLE + full_map.maze[y][x+1:]
-    
-    def find_path(self):
-		global full_map
-        if self.retour == False: #si on n'est pas sur la route du retour
-            if self.posi == carte.end: #si on atteint la console
-                self.retour = True
-                return reverse[self.path.pop(-1)]
-            else: #si on n'est pas a la console
-                flag = False
-                prev_dir = self.direction
-                while flag == False:
-                    if self.look(self.direction) == OBSTACLE:
-                        new_dir = change_dir[self.direction]
-                        if new_dir == reverse[prev_dir]:
-                            new_dir = change_dir[new_dir]
-                        self.direction=new_dir
-                    else:
-                        flag = True
-                
-                self.path.append(self.direction)
-                return self.direction   
-        else:
-            return reverse[self.path.pop(-1)]
-            
-# r: number of rows.
-# c: number of columns.
+            return self.maze[self.kirk_pos[0]][self.kirk_pos[1] - 1]
+
+    def compute_distance(self, pts):
+        # manhattan distance from start (to be maximize)
+        dx = abs(pts[1] - self.start[1])
+        dy = abs(pts[0] - self.start[0])
+        s = dx + dy
+        if self.status == 0:
+            if self.maze[self.kirk_pos[0]][self.kirk_pos[1]] == TRIED:
+                s //2
+        return s
+
+    def simulate(self, direction):
+        if direction == "UP":
+            new_position = [self.kirk_pos[0] - 1, self.kirk_pos[1]]
+        elif direction == "DOWN":
+            new_position = [self.kirk_pos[0] + 1, self.kirk_pos[1]]
+        elif direction == "RIGHT":
+            new_position = [self.kirk_pos[0], self.kirk_pos[1] + 1]
+        elif direction == "LEFT":
+            new_position = [self.kirk_pos[0], self.kirk_pos[1] - 1]
+        self.distance = self.compute_distance(new_position)
+        self.kirk_pos = new_position
+        self.maze[self.kirk_pos[0]][self.kirk_pos[1]] = TRIED
+        self.actions.append(direction)
+
+    def mark(self, status):
+        y = self.kirk_pos[0]
+        x = self.kirk_pos[1]
+        self.maze[y][x] = status
+
+
+# r, c: number of rows / columns.
 # a: number of rounds between the time the alarm countdown is activated and the time the alarm goes off.
 r, c, a = [int(i) for i in input().split()]
 
-kirk = aDallas()
-step=0
-# game loop
-while True and step < 100:
-    step+=1
-    new_map = [] 
-    # kr: row where Kirk is located.
-    # kc: column where Kirk is located.
+grid = [["?" for _ in range(c)] for _ in range(r)]
+maze = Maze(grid)
+
+actions = ["UP", "RIGHT", "LEFT", "DOWN"]
+
+while True:# and step < 100:
+    # kr, kc: row, column where Kirk is located.
     kr, kc = [int(i) for i in input().split()]
-    kirk.posi=[kr, kc]
+    maze.kirk_pos=[kr, kc]
+    if maze.kirk_pos == maze.end:
+        print("top", file=sys.stderr)
+        status == 1
+
+    if len(maze.start) == 0:
+        maze.start = [kr, kc]
     
     for i in range(r):
-        row = input()  # C of the characters in '#.TC?' (i.e. one line of the ASCII maze).
-        new_map.append(row)
-    
-    if "full_map" not in globals():
-        full_map = new_carte(new_map)
-        full_map.start = [kr, kc]
-        kirk.init_direction(full_map)
+        row = list(input())  # C of the characters in '#.TC?' (i.e. one line of the ASCII maze).
+        maze.update(row, i)
+
+    maze.show()
+
+    if maze.status ==0:
+        main_queue = []
+        second_queue = []
+        for action in actions:
+            result = maze.evaluate_direction(action)
+            if result == 1:
+                main_queue.append(action)
+            elif result == 2:
+                second_queue.append(action)
+        if len(main_queue) == 0:
+            selected_action = second_queue[0]
+            maze.mark(OBSTACLE)
+        elif len(main_queue) >= 1:
+            selected_action = main_queue[0]
+            maze.mark(TRIED)
+        print(selected_action)
     else:
-        full_map.merge(new_map)
-    
-    direction = kirk.find_path(full_map)
-    print(direction)
-    kirk.dropBreadCrumb(full_map)
-    full_map.show()
-    
-    # To debug: print("Debug messages...", file=sys.stderr)
+        pass
+
+
+
