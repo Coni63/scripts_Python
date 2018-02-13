@@ -1,6 +1,44 @@
 import sys
 import math
 
+class State:
+    def __init__(self, x, y, action, parent):
+        self.x = x
+        self.y = y
+        self.action = action
+        self.parent = parent
+        self.block_ID = arr[self.y][self.x]
+        self.outcome = []
+        self.to_delete = False
+
+    def valid_block(self, side_in):
+        if type_block[self.block_ID].get(side_in, None) is not None:
+            return True
+        else:
+            return False
+
+    def simulate(self, side_in):
+        for action in self.action:
+            if action == "NONE":
+                pass
+            else:
+                self.block_ID = rotate[action][self.block_ID]
+
+        if not self.valid_block(side_in):
+            return -1
+        else:
+            side_out = type_block[self.block_ID][side_in]
+            if side_out == "BOTTOM":
+                x, y = self.x, self.y + 1
+            elif side_out == "LEFT":
+                x, y = self.x - 1, self.y
+            elif side_out == "RIGHT":
+                x, y = self.x + 1, self.y
+            side_in = invert[side_out]
+            self.outcome = [x, y, side_in]
+            return self.outcome
+
+
 type_block = {  0:{"BLOCK":"BLOCK"}, 
                 1:{"RIGHT":"BOTTOM", "LEFT":"BOTTOM", "TOP":"BOTTOM"},
                 2:{"RIGHT":"LEFT", "LEFT":"RIGHT"}, 
@@ -17,46 +55,44 @@ type_block = {  0:{"BLOCK":"BLOCK"},
                 13:{"LEFT":"BOTTOM"}
             }
 
-rotate = { "RIGHT" : {2:3, 3:2, 4:5, 5:4, 6:7, 7:8, 8:9, 9:6, 10:11, 11:12, 12:13, 13:10}, 
-            "LEFT" : {2:3, 3:2, 4:5, 5:4, 6:9, 9:8, 8:7, 7:6, 10:13, 13:12, 12:11, 11:10} }
+rotate = { "RIGHT" : {1:1, 2:3, 3:2, 4:5, 5:4, 6:7, 7:8, 8:9, 9:6, 10:11, 11:12, 12:13, 13:10},
+            "LEFT" : {1:1, 2:3, 3:2, 4:5, 5:4, 6:9, 9:8, 8:7, 7:6, 10:13, 13:12, 12:11, 11:10} }
 
 invert = {"RIGHT":"LEFT", "LEFT":"RIGHT", "BOTTOM":"TOP"}
 
+actions = [["NONE"], ["RIGHT"], ["LEFT"], ["LEFT", "LEFT"]]
+
+def next_node(x, y, side_in):
+    while arr[y][x] < 0:
+        block = arr[y][x]
+        side_out = type_block[abs(block)][side_in]
+
+        if side_out == "BOTTOM":
+            x, y = x, y+1
+        elif side_out == "LEFT":
+            x, y = x-1, y
+        elif side_out == "RIGHT":
+            x, y = x+1, y
+
+        side_in = invert[side_out]
+    return x, y, side_in
+
+
 arr = []
-
-def check_orientation(direction, blockID, rotation):
-    global xi, w
-    if xi == 0 or xi == w:
-        out = ["BOTTOM"]
-    else:
-        out = ["BOTTOM","LEFT","RIGHT"]
-    
-    if rotation != "NONE":
-        new_blockID = rotate[rotation][abs(blockID)]
-    else:
-        new_blockID = blockID
-    
-    if direction not in type_block[new_blockID].keys() or type_block[new_blockID][direction] not in out: #si on ne peut pas rentrer par ce coté ou si ca sort au top
-        return False
-    else:
-        return True
- 
-def rotate_block(pos, sens):
-    arr[pos[1]][pos[0]] = -rotate[sens][abs(int(arr[pos[1]][pos[0]]))]
-    print(pos[0], pos[1], sens)
-
 # w: number of columns.
 # h: number of rows.
 w, h = [int(i) for i in input().split()]
 for i in range(h):
     line = input()  # each line represents a line in the grid and contains W integers T. The absolute value of T specifies the type of the room. If T is negative, the room cannot be rotated.
-    arr.append(line.split(" "))
-    print(line, file=sys.stderr)
+    arr.append([int(x) for x in line.split()])
+    # print(line, file=sys.stderr)
 ex = int(input())  # the coordinate along the X axis of the exit.
+
+state_list = []
 
 # game loop
 while True:
-    xi, yi, side = input().split()
+    xi, yi, side_in = input().split()
     xi = int(xi)
     yi = int(yi)
     r = int(input())  # the number of rocks currently in the grid.
@@ -64,33 +100,39 @@ while True:
         xr, yr, posr = input().split()
         xr = int(xr)
         yr = int(yr)
-    
-    # on recup l'id de notre block et le coté par lequel on sort
-    block = int(arr[yi][xi])
-    out_direction = type_block[abs(block)][side]
-    
-    #selon d'ou on sort, on calcul notre position suivant
-    if out_direction == "BOTTOM":
-        next_pos = [xi, yi+1]
-    elif out_direction == "LEFT":
-        next_pos = [xi-1, yi]
-    elif out_direction == "RIGHT":
-        next_pos = [xi+1, yi]
-    
-    #on connait donc le block suivant et le sens d'arrivé
-    in_direction = invert[out_direction]
-    next_block = int(arr[next_pos[1]][next_pos[0]])
-    
-    
-    if next_block > 0:
-        if check_orientation(in_direction, next_block, "NONE"): #si on peut sortir sans tourner
-            print("WAIT")
-        elif check_orientation(in_direction, next_block,"RIGHT"): #sinon on verifie en tournant a droite
-            rotate_block(next_pos, "RIGHT")
-        elif check_orientation(in_direction, next_block, "LEFT"): #ou a gauche
-            rotate_block(next_pos, "LEFT")
-    else:
-        print("WAIT")            
-    
 
-    # To debug: print("Debug messages...", file=sys.stderr)
+    for i in range(3):
+        if len(state_list) == 0:
+            parent = None
+            x, y, side_in = next_node(xi, yi, side_in)
+        else:
+            parent = state_list.pop(0)
+            x, y, side_in = parent.outcome
+
+        for action in actions:
+            s = State(x, y, action, parent)
+            expected_state = s.simulate(side_in)
+            if expected_state == -1:
+                pass
+            else:
+                x, y, side_in = expected_state
+                x, y, side_in = next_node(x, y, side_in)
+                state_list.append(s)
+
+        print(state_list, file=sys.stderr)
+    print("WAIT")
+
+
+
+
+
+    # if next_block > 0:
+    #     if check_orientation(in_direction, next_block, "NONE"): #si on peut sortir sans tourner
+    #         print("WAIT")
+    #     elif check_orientation(in_direction, next_block,"RIGHT"): #sinon on verifie en tournant a droite
+    #         rotate_block(next_pos, "RIGHT")
+    #     elif check_orientation(in_direction, next_block, "LEFT"): #ou a gauche
+    #         rotate_block(next_pos, "LEFT")
+    # else:
+    #     print("WAIT")
+
