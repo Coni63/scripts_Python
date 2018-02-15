@@ -1,5 +1,6 @@
 import sys
 import math
+import random
 
 class Zone:
     instances = {}
@@ -10,7 +11,11 @@ class Zone:
         self.link = []
         self.owner = None
         self.pods = []  # pods per team
-        
+
+    @property
+    def is_bottleneck(self):
+        return len(self.link) <= 2
+
     def add_link(self, other_area):
         self.link.append(other_area)
         
@@ -32,34 +37,87 @@ class Player:
         print("PODS", file=sys.stderr)
         for key, value in self.pods.items():
             print(key, value, file=sys.stderr)
-    
-    def move(self):
+
+    def evaluate_moves(self, zone, nb_pods=1):
+        score = {}
+        for neighbor in zone.link:
+            if neighbor.owner == -1:
+                score[neighbor] = 1
+            elif neighbor.owner not in [-1, my_id]:
+                other_pods = neighbor.pods
+                if sum(other_pods) == 0:
+                    score[neighbor] = 2
+                if nb_pods > max(other_pods):
+                    score[neighbor] = 5
+            else:
+                score[neighbor] = 0
+        return score
+
+    def pick_move(self, moves):
+        if len(moves) == 0: # si on est bloqué dans un coin avec un pion a coté
+            dest = -1
+        elif sum(moves.values()) == 0: # on a que des moves dans la zone a nous
+            dest = random.choice(list(moves.keys()))
+        else:
+            dest = max(moves.items(), key = lambda x: x[1])[0]
+        return dest
+
+
+    def expand(self):
         move_list = []
         for zone, nb_pods in self.pods.items():
-            free_area = []
-            for neighbor in zone.link:
-                if neighbor.owner == -1:
-                    free_area.append(neighbor)
-            valid_move = min(nb_pods, len(free_area))
-            for i in range(valid_move):
-                dest = free_area.pop(0)
-                move_list += [1, zone.ID, dest.ID]  # pods, origin, dest
-        
+            moves = self.evaluate_moves(zone, nb_pods)
+            dest = self.pick_move(moves)
+            if dest != -1:
+                move_list += [nb_pods, zone.ID, dest.ID]
+
         if len(move_list) > 0:
             move_list = map(str, move_list)
             print(" ".join(move_list))
         else:
             print("WAIT")
-    
-    def conquer(self):
-        result = []
+
+
+    def get_number_of_pods_craftable(self):
+        return me.platinum//20
+
+    def check_best_positions(self):
         possible_spawn = filter(lambda x: x.owner == -1, Zone.instances.values())
-        best_areas = sorted(possible_spawn, key = lambda x : x.platinum, reverse = True)
-        possible_pods = me.platinum//20
-        nb_valid = min(possible_pods, len(best_areas))
-        for i in range(nb_valid):
-            area = best_areas.pop(0)
-            result += [1, area.ID]
+        best_areas = sorted(possible_spawn, key=lambda x: x.platinum, reverse=True)
+        return best_areas
+
+    def check_my_areas_close_to_enemies(self):
+        my_areas = filter(lambda x: x.owner == my_id, Zone.instances.values())
+        best_spawn = 0
+        best_score = 0
+        for each_area in my_areas:
+            moves = self.evaluate_moves(each_area)
+            score = sum(moves.values())
+            if score > best_score:
+                score = best_score
+                best_spawn = each_area
+        return best_spawn
+
+    def spawn(self):
+        nb_pods = self.get_number_of_pods_craftable()
+        result = []
+        if nb_pods > 0:
+            best_areas = self.check_best_positions()
+            if len(best_areas) > 0:
+                if len(best_areas) >= nb_pods:
+                    for i in range(nb_pods):
+                        area = best_areas.pop(0)
+                        result += [1, area.ID]
+                elif len(best_areas) < nb_pods:
+                    qte_list = share(nb_pods, len(best_areas))
+                    for i in range(len(best_areas)):
+                        area = best_areas.pop(0)
+                        qte = qte_list.pop(0)
+                        result += [qte, area.ID]
+            else:
+                spawn = self.check_my_areas_close_to_enemies()
+                result += [nb_pods, spawn.ID]
+
         if len(result) > 0:
             result = map(str, result)
             print(" ".join(result))
@@ -67,21 +125,45 @@ class Player:
             print("WAIT")
             
     
+    # def first_turn(self):
+    #     self.first_turn2()
+    #     result = []
+    #     best_areas = sorted(Zone.instances.values(), key = lambda x : x.platinum, reverse = True)
+    #     for i in range(10):
+    #         area = best_areas.pop(0)
+    #         result += [1, area.ID]
+    #     result = map(str, result)
+    #     print("WAIT")
+    #     print(" ".join(result))
+
+
     def first_turn(self):
+        best_areas = []
         result = []
-        best_areas = sorted(Zone.instances.values(), key = lambda x : x.platinum, reverse = True)
-        for i in range(5):
+        for z in Zone.instances.values():
+            if z.is_bottleneck:
+                best_areas.append(z)
+        best_areas.sort(key = lambda x : x.platinum, reverse = True)
+        for i in range(10):
             area = best_areas.pop(0)
-            result += [2, area.ID]
+            result += [1, area.ID]
         result = map(str, result)
         print("WAIT")
         print(" ".join(result))
-    
+
+
     def play(self):
-        self.move()
-        self.conquer()
-            
-        
+        self.expand()
+        self.spawn()
+
+def share(n_elem, size):
+    shared = [0] * size
+    for i in range(size):
+        qte = n_elem // (size-i)
+        shared[i] = qte
+        n_elem -= qte
+    return shared
+
 
 # player_count: the amount of players (2 to 4)
 # my_id: my player ID (0, 1, 2 or 3)
@@ -132,4 +214,4 @@ while True:
     else:
         me.play()
         
-    turn += 1
+    turn += 7
