@@ -1,6 +1,7 @@
 import sys
 import math
 import random
+import time
 
 class Zone:
     instances = {}
@@ -11,10 +12,11 @@ class Zone:
         self.link = []
         self.owner = None
         self.pods = []  # pods per team
+        self.continent = -1
 
     @property
     def is_bottleneck(self):
-        return len(self.link) <= 2
+        return len(self.link) < 2
 
     def add_link(self, other_area):
         self.link.append(other_area)
@@ -28,6 +30,7 @@ class Player:
         self.pods = {}
         self.zones = []
         self.platinum = 200
+        self.target_area = []
     
     @property
     def score(self):
@@ -40,6 +43,8 @@ class Player:
 
     def evaluate_moves(self, zone, nb_pods=1):
         score = {}
+        if len(zone.link) == 0:
+            print(zone.ID, file=sys.stderr)
         for neighbor in zone.link:
             if neighbor.owner == -1:
                 score[neighbor] = 1
@@ -82,12 +87,12 @@ class Player:
         return me.platinum//20
 
     def check_best_positions(self):
-        possible_spawn = filter(lambda x: x.owner == -1, Zone.instances.values())
+        possible_spawn = filter(lambda x: x.owner == -1, self.target_area)
         best_areas = sorted(possible_spawn, key=lambda x: x.platinum, reverse=True)
         return best_areas
 
     def check_my_areas_close_to_enemies(self):
-        my_areas = filter(lambda x: x.owner == my_id, Zone.instances.values())
+        my_areas = filter(lambda x: x.owner == my_id, self.target_area)
         best_spawn = 0
         best_score = 0
         for each_area in my_areas:
@@ -116,7 +121,8 @@ class Player:
                         result += [qte, area.ID]
             else:
                 spawn = self.check_my_areas_close_to_enemies()
-                result += [nb_pods, spawn.ID]
+                if spawn != 0:
+                    result += [nb_pods, spawn.ID]
 
         if len(result) > 0:
             result = map(str, result)
@@ -140,13 +146,15 @@ class Player:
     def first_turn(self):
         best_areas = []
         result = []
-        for z in Zone.instances.values():
+        for z in self.target_area:
             if z.is_bottleneck:
                 best_areas.append(z)
-        best_areas.sort(key = lambda x : x.platinum, reverse = True)
-        for i in range(10):
+        best_areas.sort(key = lambda x : x.platinum)
+        qte_list = share(10, len(best_areas))
+        for i in range(len(best_areas)):
             area = best_areas.pop(0)
-            result += [1, area.ID]
+            qte = qte_list.pop(0)
+            result += [qte, area.ID]
         result = map(str, result)
         print("WAIT")
         print(" ".join(result))
@@ -175,7 +183,7 @@ for i in range(zone_count):
     # platinum_source: the amount of Platinum this zone can provide per game turn
     zone_id, platinum_source = [int(j) for j in input().split()]
     Zone(zone_id, platinum_source)
-    
+
 
 for i in range(link_count):
     zone_1, zone_2 = [int(j) for j in input().split()]
@@ -183,8 +191,57 @@ for i in range(link_count):
     z2 = Zone.instances[zone_2]
     z1.add_link(z2)
     z2.add_link(z1)
+    if zone_1 in [0, 18] or zone_2 in [0, 18]:
+        print(zone_1, zone_2, file=sys.stderr)
+
+print(Zone.instances[0].link, file=sys.stderr)
+print(Zone.instances[18].link, file=sys.stderr)
+
+# Define all continents:
+visited = []
+continent_ID = 0
+for zone in Zone.instances.values():
+    if zone not in visited:
+        continent_ID += 1
+        visited.append(zone)
+        zone.continent = continent_ID
+        queue = zone.link[:]
+        while len(queue) > 0:
+            z = queue.pop(0)
+            visited.append(z)
+            z.continent = continent_ID
+            queue += [x for x in z.link if x not in visited]
+print(continent_ID, file=sys.stderr)
 
 me = Player()
+
+world = {}
+for i in range(1, 6):
+    continent = list(filter(lambda x:x.continent == i, Zone.instances.values()))
+    size = len(continent)
+    if size == 3:
+        world["japon"] = continent
+    elif size == 7:
+        world["antarctic"] = continent
+    elif size == 33:
+        world["morth_america"] = continent
+    elif size == 44:
+        world["africa"] = continent
+    elif size == 67:
+        world["eurasia"] = continent
+
+if player_count > 2:
+    target_1 = world["eurasia"] + world["antarctic"] + world["japon"]
+    target_2 = world["africa"] + world["morth_america"]
+    s1 = sum([x.platinum for x in target_1])
+    s2 = sum([x.platinum for x in target_2])
+    if s1 >= s2:
+        me.target_area = target_1
+    else:
+        me.target_area = target_2
+else:
+    me.target_area = Zone.instances.values()
+
 turn = 0
 while True:
     platinum = int(input())  # my available Platinum
@@ -207,7 +264,7 @@ while True:
         if pods[my_id] > 0:
             me.pods[zone] = pods[my_id]
 
-    # print(me.show(), file=sys.stderr)
+    # print(me.pods, file=sys.stderr)
     
     if turn == 0:
         me.first_turn()

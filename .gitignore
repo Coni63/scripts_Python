@@ -1,0 +1,15 @@
+*.csv
+*.zip
+*.xls
+*.xlsx
+*.npz
+*.h5
+*.bat
+*.npy
+
+elasticsearch-5.6.3/*
+MongoDB/*
+.*/*
+**/*.ckpt.*
+**/__pycache__/*
+**/.ipynb_checkpoints/*

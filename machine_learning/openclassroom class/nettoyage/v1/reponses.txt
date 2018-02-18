@@ -1,0 +1,22 @@
+Question 1 :
+
+petal_width en fonction de petal_length : 0.942274
+sepal_width en fonction de petal_width : -0.438271
+
+Question 2 :
+Graphe 1 : On remarque que l'ensemble des points sont assez bien alignés, de ce fait le coefficient est élevé. 
+Graphe 2 : On voit l'équivalent de 2 regressions linéaires avec des abcisses et ordonnées différentes (cela dépend du type d'espèces). Or, on cherche à n'avoir qu'une régression, celle-ci a un coefficient directeur complètement contre-intuitif et cela augmente fortement les erreurs et donc nuit à R².
+
+Question 3 :
+cas 1 : a = 0.385994, b = 0.509268
+cas 2 : a = 0.317321, b = 0.015082
+cas 3 : a = 0.671191, b = 0.764758
+cas 4 : a = 0.699191, b = 0.076837
+
+Question 4 :
+On a complété sepal_width par 0.3331473509555348 a partir de l'espece: setosa et de petal_width=1.0023435676326218
+On a complété petal_width par 1.293201118502893  a partir de petal_length=4.027837977207209
+On a complété sepal_width par 1.6569771393101191 a partir de l'espece: versicolor et de petal_width=2.259954321281721
+On a complété sepal_width par 2.99437043589523   a partir de l'espece: virginica et de petal_width=3.3218723995908728
+
+Le code est dans le notebook/rendu HTML

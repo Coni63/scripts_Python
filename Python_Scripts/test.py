@@ -777,3 +777,21 @@
 # out = np.zeros_like(t)
 # out[0,0,a] = 1
 # print(a, out)
+import sys
+
+def share(n_elem, size):
+    res = []
+    for _ in range(size):
+        if qte >=  size:
+            qte = n_elem//size
+            n_elem -= qte
+            size.append(qte)
+        else:
+            size.append(n_elem)
+    return size
+
+print(share(4, 3))
+print(share(9, 3))
+print(share(10, 3))
+print(share(2, 2))
+print(share(2, 4))

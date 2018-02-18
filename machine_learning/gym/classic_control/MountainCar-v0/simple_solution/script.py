@@ -17,6 +17,8 @@ def evaluate(env):
 
 score, step = 0, 0
 obs = env.reset()
+print(obs)
+print(env.action_space.sample() )
 while True:
     env.render()
     action = evaluate(obs)

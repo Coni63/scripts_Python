@@ -22,12 +22,24 @@ def in_grammar(word):
         return False
     node = 0
     for c in word[1:]:
-        transitions = graph[node]
         try:
+            transitions = graph[node]
             node = transitions[0][transitions[1].index(c)]
-        except ValueError:  # using exceptions for flow control in python is common
+        except:
             return False
     return True
+
+    
+def in_embedded_grammar(word):
+    if word[0] != "B":
+        return 1
+    if word[1] not in ["T", "P"]:
+        return 2
+    if word[1] != word[-2]:
+        return 3
+    if not in_grammar(word[2:-2]):
+        return 4
+    return 0
 
 
 def sequenceToWord(sequence):

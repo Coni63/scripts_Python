@@ -7,11 +7,10 @@ def simple_solver(obs):
 
 score = 0
 observation = env.reset()
-
 while True:
     env.render()
-    action = 2 #env.action_space.sample()#simple_solver(observation)
-    observation, reward, done, info = env.step(action) # observation = [cart_position, cart speed, pole angle, pole speed]
+    action = 2 #env.action_space.sample()               #simple_solver(observation)
+    observation, reward, done, info = env.step(action)  # observation = [cart_position, cart speed, pole angle, pole speed]
     print(observation, "\n", reward)
     score += reward
     if done:

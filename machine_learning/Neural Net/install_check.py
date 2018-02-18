@@ -32,6 +32,7 @@ def main():
             print("The installed version of TensorFlow does not include GPU support.")
         sys.exit(0)
     except ImportError:
+        print(ImportError.args)
         print("ERROR: Failed to import the TensorFlow module.")
 
     candidate_explanation = False

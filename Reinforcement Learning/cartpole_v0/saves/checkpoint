@@ -1,0 +1,6 @@
+model_checkpoint_path: "video_model_AdamOp_730.ckpt"
+all_model_checkpoint_paths: "video_model_AdamOp_690.ckpt"
+all_model_checkpoint_paths: "video_model_AdamOp_700.ckpt"
+all_model_checkpoint_paths: "video_model_AdamOp_710.ckpt"
+all_model_checkpoint_paths: "video_model_AdamOp_720.ckpt"
+all_model_checkpoint_paths: "video_model_AdamOp_730.ckpt"
